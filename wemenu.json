@@ -1,0 +1,16 @@
+{
+  "button": [
+    {
+      "type": "view",
+      "name": "个人中心",
+      "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxaa9345f2ccaaf19e&redirect_uri=http%3a%2f%2fsdxtest.fafa.com.cn%2fpcp%2fview%2fwechat%2fhome&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+      "sub_button": []
+    },
+    {
+      "type": "view",
+      "name": "抽奖活动",
+      "url": "http://wx.keepright.cn/minimalltest/view/prize/drawManagement?eventId=f8e517b1-3554-47f4-974c-66af5122ed4a&gId=db616ec7-644d-4cee-a420-62ff13d2e923&orgCode%20=001019&publicId=10000016&brand=Mwood",
+      "sub_button": []
+    }
+  ]
+}
