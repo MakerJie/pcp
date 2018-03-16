@@ -1,0 +1,117 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "二维码管理", pageName = "个人中心";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .card-block img {
+            width: 85%;
+            /*height: 160px;*/
+            margin: auto;
+        }
+
+        .level_pro_info {
+            position: absolute;
+            left: 42px;
+            top: 57px;
+            font-size: 11px;
+        }
+
+        .adv img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <%
+        const Level = ["","蓝卡","金卡","铂金卡","黑卡","员工卡"];
+    %>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row" style="margin: 5px;padding-top: 15px;padding-bottom: 15px;">
+                <div style="float: left;position: relative;">
+                    <img style="width: 80px;margin-bottom: 20px;"
+                         src="<%= global.config.publicPath %>/page/images/icon/cup_blue.png">
+                    <span style="position: absolute;left: 33px;top:35px;color: #014288;font-weight: 700;"><%= Level[userData.cardLevel] %></span>
+                    <div style="font-size: 20px;width: 90px;"><%= userData.realName %></div>
+                    <div style="font-size: 13px; font-weight: 700;" class="yellow-font">
+                        <span><%= userData.totalPoint || 0 %></span> 积分余额
+                    </div>
+                </div>
+                <div style="width: 190px;float: right;">
+                    <div style="position: relative;">
+                        <img class="img-responsive"
+                             src="<%= global.config.publicPath %>/page/images/icon/pizza_bar.png %>">
+                        <span class="level_pro_info yellow-font">升级需 <span id="needPoint" style="font-weight: 700;"></span> 消费积分</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin: 0 5px;">
+                <div class="card-block" id="cardBlock">
+                    <div>
+                        <img class="img-responsive" id="cardImage"
+                             src="<%= global.config.publicPath %>/page/images/icon/card.png %>">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row adv" style="margin: 0;padding: 10px 10px 30px 10px;">
+                <div style="width: 50%;float: left;padding: 5px;" id="left_image" data-link="">
+                    <img src="<%= global.config.publicPath %>/page/images/icon/def1.png">
+                </div>
+                <div style="width:50%;float: right;padding: 5px;" id="right_image" data-link="">
+                    <img src="<%= global.config.publicPath %>/page/images/icon/def2.png">
+                </div>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+</div>
+<div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="top:20%;" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">电子会员卡</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <img src="" id="barCode" style="width: 100%;" />
+                </div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="productInfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="top:20%;" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">我的最爱</h4>
+            </div>
+            <div class="modal-body">
+                <div id="myFavor">
+                    <p>暂无订单信息</p>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<% include ../common/bottom.ejs %>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/jsBarCode/JsBarcode.all.js"></script>
+</body>
+</html>

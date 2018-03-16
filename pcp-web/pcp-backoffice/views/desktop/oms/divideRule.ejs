@@ -1,0 +1,279 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "消费订单", txt2 = "分摊规则";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/css/multiple-select.css" rel="stylesheet">
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="card card-accent-primary">
+                                    <div class="card-header">
+                                        <i class="fa fa-bullhorn"></i> 规则类型
+                                        <button type="button" class="btn btn-outline-primary btn-sm float-right btn_add hide_el"><i
+                                                    class="fa fa-plus-circle"></i>&nbsp;新增规则
+                                        </button>
+                                    </div>
+                                    <div id="dataList"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="card card-accent-secondary">
+                                    <div class="card-header">
+                                        <i class="fa fa-bullseye"></i> 规则明细
+                                        <button type="button"
+                                                class="btn btn-outline-primary btn-sm float-right line_btn_add hide_el"><i
+                                                    class="fa fa-plus-circle"></i>&nbsp;新增规则明细
+                                        </button>
+                                    </div>
+                                    <div id="dataLineList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<!-- 规则类型 -->
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">类型编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="data_form" class="edit-form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>支付方式</strong></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="payWay"
+                                            name="payCode"
+                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                            ajaxType="post"
+                                            optionParam='{"properties":{"pageSize":1000}}'
+                                            optionUrl="/api/5afa3f00d2ac4808b19d156b876c6615">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label"><strong>需要开票</strong></label>
+                                <label class="switch switch-text switch-primary" style="padding-left: 15px;">
+                                    <input class="switch-input" type="checkbox" name="properties.invoice"/>
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>折扣类别</strong></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="type">
+                                        <option value="" selected="">--请选择--</option>
+                                        <option value="1">整单满减</option>
+                                        <option value="2">整单折扣</option>
+                                        <option value="3">单品折扣</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>折扣编码</strong></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="disCode" placeholder=""/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>结算频率</strong></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="frequency"
+                                           placeholder=""/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>分摊限额</strong></label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="limitAmount"
+                                           placeholder=""/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>分摊方式</strong></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="category">
+                                        <option value="" selected="">--请选择--</option>
+                                        <option value="1">比例分摊</option>
+                                        <option value="2">单笔固定金额分摊</option>
+                                        <option value="3">满减固定金额分摊</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>时间范围</strong></label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control date-picker" name="startDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           placeholder="yyyy-mm-dd" value="">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control date-picker" name="endDate"
+                                           data-date-format="yyyy-mm-dd"
+                                           placeholder="yyyy-mm-dd" value="">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- 规则明细 -->
+<div class="modal fade" id="lineDataModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">规则明细</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="line_data_form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>日期</strong></label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="1" name="mon" value="1">周一
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="2" name="tue" value="2">周二
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="3" name="wed" value="3">周三
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="4" name="thu" value="4">周四
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="5" name="fri" value="5">周五
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="6" name="sat" value="6">周六
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-inline">
+                                        <label>
+                                            <input type="checkbox" data-idx="7" name="sun" value="7">周日
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>活动品牌</strong></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="brand" options="brandName">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>活动门店</strong></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="shopSelect" name="_shopCode" multiple
+                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                            emptyOption="false"
+                                            ajaxType="post"
+                                            codeField="dn"
+                                            optionParam='{"properties":{"pageSize":1000,"type":"1"}}'
+                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>折扣率/固定金额</strong></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="value" placeholder=""/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label static-label"><strong>满减折扣基数</strong></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="value1" placeholder=""/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="line_error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary line_btn_save"><i
+                            class="fa fa-dot-circle-o"></i> 保存
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/js/multiple-select.js"></script>
+</body>
+</html>

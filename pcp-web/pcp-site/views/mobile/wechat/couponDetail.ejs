@@ -1,0 +1,78 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "优惠券详情";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .barCode {
+
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid" style="font-size: 15px;">
+            <div class="block4"
+                 style="width: 250px;height:250px;text-align: center;margin: 20px auto 10px auto;padding: 18px;">
+                <img src="" id="voucherImage" style="width: 100%;height: 100%;vertical-align: top;border-radius: 20px;">
+            </div>
+            <div class="text-center">
+                <button class="btn btn-pizza btn_u" id="con_use" data-coupon="" data-user="" type="button"
+                        style="margin: 10px;">确认使用
+                </button>
+                <button class="btn btn-pizza btn_u" id="transfer_use" data-coupon="" data-user="" type="button"
+                        style="margin: 10px;">转赠好友
+                </button>
+            </div>
+            <div style="padding: 20px;">
+                <div><strong>使用须知</strong></div>
+                <div style="padding: 0 10px;" id="remark_coupon"></div>
+                <p></p>
+                <div><strong>适用门店</strong></div>
+                <div style="padding: 0 10px;" id="scope_coupon"></div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="top:20%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">优惠券详情</h4>
+            </div>
+            <div class="modal-body">
+                <div class="barCode">
+                    <img src="" id="barCode" style="width: 100%;"/>
+                </div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="pageData"
+     data-pre="<%= global.config.publicPath %>"
+     data-surl="<%= data.serverUrl %>"
+     data-appid="<%= data.appId %>"
+     data-timestamp="<%= data.timestamp %>"
+     data-noncestr="<%= data.nonceStr %>"
+     data-signature="<%= data.signature %>" ></div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/jsBarCode/JsBarcode.all.js"></script>
+</body>
+</html>

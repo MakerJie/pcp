@@ -1,0 +1,41 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "主页",txt2="起始页";
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include common/meta.ejs %>
+    <% include common/public.ejs %>
+</head>
+<body class="fix-sidebar">
+<!-- Preloader -->
+<div class="preloader">
+    <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+    </svg>
+</div>
+<div id="wrapper">
+    <% include common/nav.ejs %>
+    <% include common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+
+            <% include common/breadcrumb.ejs %>
+            <!-- .row -->
+            <div class="row bg-content">
+                <div class="col-md-12">
+                        <h3 class="box-title">Blank Starter page</h3>
+                </div>
+            </div>
+            <!-- .row -->
+        </div>
+        <!-- /.container-fluid -->
+        <% include common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include common/footer.ejs %>
+</body>
+</html>

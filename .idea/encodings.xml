@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-auth" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-auth/pcp-auth-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-auth/pcp-auth-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-common/pcp-data" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-common/pcp-domain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-crm" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-crm/pcp-crm-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-crm/pcp-crm-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-facade" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-log" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-log/pcp-log-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-log/pcp-log-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-netflix" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-netflix/pcp-netflix-client" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-netflix/pcp-netflix-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-pos" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-pos/pcp-pos-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-pos/pcp-pos-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-web/pcp-backoffice" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pcp-web/pcp-site" charset="UTF-8" />
+  </component>
+</project>

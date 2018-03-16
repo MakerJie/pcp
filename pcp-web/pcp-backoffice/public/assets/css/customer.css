@@ -1,0 +1,101 @@
+.footer {
+    padding: 15px;
+}
+
+.white-box {
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.white-box .row {
+    margin-right:-10px;
+}
+
+.user-img {
+    width: 36px;
+}
+
+.bg-title {
+    padding: 5px 10px 5px;
+    margin-bottom: 10px;
+    height: 40px;
+}
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 0;
+}
+
+.panel {
+    box-shadow: 0 1px 0 1px #e4e6eb;
+    margin-bottom: 8px;
+}
+
+.panel .panel-heading {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.panel .panel-body {
+    padding: 5px 15px;
+}
+
+.panel .panel-footer {
+    padding: 10px 15px;
+}
+
+.panel-body .query-condition {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.mail_listing{
+    min-height: 400px;
+}
+
+.page-title{
+    margin-left: 5px;
+    font-weight: 700 !important;
+}
+
+.mail-list .list-group-item.active{
+    font-weight: 700;
+}
+
+td .btn-circle{
+    width: auto;
+    height: auto;
+}
+a .badge{
+    margin-top: -3px;
+}
+
+.modal-body td .btn.btn-default{
+    height: 32px;
+    padding: 8px;
+}
+
+table .checkbox {
+    margin: 5px 0 0 0;
+}
+
+.navbar-top-links > li > a{
+    min-height: 40px;
+    line-height:40px;
+}
+.top-left-part a{
+    line-height: 40px;
+}
+
+.fix-header #page-wrapper {
+    margin-top: 40px;
+}
+
+.sidebar{
+    top: 40px;
+}
+
+.navbar {
+    min-height: 32px;
+}

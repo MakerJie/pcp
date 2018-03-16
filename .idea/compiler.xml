@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="pcp-auth-api" />
+        <module name="pcp-auth-server" />
+        <module name="pcp-backoffice" />
+        <module name="pcp-crm-api" />
+        <module name="pcp-crm-server" />
+        <module name="pcp-data" />
+        <module name="pcp-domain" />
+        <module name="pcp-facade" />
+        <module name="pcp-log-api" />
+        <module name="pcp-log-server" />
+        <module name="pcp-netflix-client" />
+        <module name="pcp-netflix-server" />
+        <module name="pcp-pos-api" />
+        <module name="pcp-pos-server" />
+        <module name="pcp-site" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="pcp" target="1.8" />
+      <module name="pcp-auth" target="1.8" />
+      <module name="pcp-auth-api" target="1.8" />
+      <module name="pcp-auth-server" target="1.8" />
+      <module name="pcp-backoffice" target="1.8" />
+      <module name="pcp-common" target="1.8" />
+      <module name="pcp-crm" target="1.8" />
+      <module name="pcp-crm-api" target="1.8" />
+      <module name="pcp-crm-server" target="1.8" />
+      <module name="pcp-data" target="1.8" />
+      <module name="pcp-domain" target="1.8" />
+      <module name="pcp-facade" target="1.8" />
+      <module name="pcp-log" target="1.8" />
+      <module name="pcp-log-api" target="1.8" />
+      <module name="pcp-log-server" target="1.8" />
+      <module name="pcp-netflix" target="1.8" />
+      <module name="pcp-netflix-client" target="1.8" />
+      <module name="pcp-netflix-server" target="1.8" />
+      <module name="pcp-pos" target="1.8" />
+      <module name="pcp-pos-api" target="1.8" />
+      <module name="pcp-pos-server" target="1.8" />
+      <module name="pcp-site" target="1.8" />
+      <module name="pcp-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

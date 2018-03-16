@@ -1,0 +1,118 @@
+<% const ctx = global.config.contextPath+global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include crmMenu %>
+        </div>
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <!--<div class="col-lg-12">-->
+                    <!--<div class="box">-->
+                        <!--<div class="box-header">-->
+                            <!--<h2>快速链接</h2>-->
+                        <!--</div>-->
+                        <!--<div class="box-content">-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/user" class="quick-button-small">-->
+                                    <!--<i class="fa fa-address-card"></i>-->
+                                    <!--<p>会员信息</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/promotion" class="quick-button-small">-->
+                                    <!--<i class="fa fa-gift"></i>-->
+                                    <!--<p>礼券管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="#" class="quick-button-small">-->
+                                    <!--<i class="fa fa-cog"></i>-->
+                                    <!--<p>轮播设置</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/userPoint" class="quick-button-small">-->
+                                    <!--<i class="fa fa-paper-plane-o"></i>-->
+                                    <!--<p>积分/等级</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/pointStoreType" class="quick-button-small">-->
+                                    <!--<i class="fa fa-meetup" aria-hidden="true"></i>-->
+                                    <!--<p>积分商品类型</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/authority" class="quick-button-small">-->
+                                    <!--<i class="fa fa-graduation-cap"></i>-->
+                                    <!--<p>会员权益</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/advertise" class="quick-button-small">-->
+                                    <!--<i class="fa fa-quora" aria-hidden="true"></i>-->
+                                    <!--<p>广告管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/channel" class="quick-button-small">-->
+                                    <!--<i class="fa fa-road" aria-hidden="true"></i>-->
+                                    <!--<p>渠道管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/message" class="quick-button-small">-->
+                                    <!--<i class="fa fa-file-word-o" aria-hidden="true"></i>-->
+                                    <!--<p>留言管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/qrcode" class="quick-button-small">-->
+                                    <!--<i class="fa fa-share-square-o" aria-hidden="true"></i>-->
+                                    <!--<p>二维码管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/levelManage" class="quick-button-small">-->
+                                    <!--<i class="fa  fa-sitemap" aria-hidden="true"></i>-->
+                                    <!--<p>会员等级管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/reward" class="quick-button-small">-->
+                                    <!--<i class="fa fa-gift" aria-hidden="true"></i>-->
+                                    <!--<p>奖励管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+                            <!--<div class="col-lg-1 col-md-2 col-xs-6">-->
+                                <!--<a href="<%= ctx %>/crm/reward" class="quick-button-small">-->
+                                    <!--<i class="fa fa-gg" aria-hidden="true"></i>-->
+                                    <!--<p>优惠券管理</p>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+
+
+                            <!--<div class="clearfix"></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>&lt;!&ndash;/col&ndash;&gt;-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "我的优惠券";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .descr {
+            padding: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="coupon-tab hor-tab">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="block2 page-link <%= (queryData.status == 1 ? 'active' : '') %>"
+                             data-link="<%= ctx %>/wechat/coupon?status=1">
+                            <span>未使用</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block2 page-link <%= (queryData.status == 3 ? 'active' : '') %>"
+                             data-link="<%= ctx %>/wechat/coupon?status=3">
+                            <span>已使用</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block2 page-link <%= (queryData.status == 5 ? 'active' : '') %>"
+                             data-link="<%= ctx %>/wechat/coupon?status=5">
+                            <span>已过期</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="couponData">
+                <div class="text-center descr">请稍候，数据加载中...</div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>
