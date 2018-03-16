@@ -1,0 +1,306 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+    <style>
+        .badge{
+            background-color: #ff5454;
+            color: white;
+        }
+        .static-label{
+            line-height: 32px !important;
+        }
+        #dataToSap{
+            position: absolute;
+            top: -130px;
+            right: 10px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include omsMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb list">
+                    <li><a href="<%= ctx %>/oms/index">消费订单</a></li>
+                    <li><a href="#">租金管理</a></li>
+                </ol>
+            </div>
+            <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                <li role="presentation" class="active">
+                    <a href="#type4" id="tab_user1" idx="1"
+                       aria-controls="type4" role="tab"
+                       data-toggle="tab"><i class="fa fa-plus" aria-hidden="true"></i> 新建租金合同</a>
+                </li>
+                <li role="presentation">
+                    <a href="#home4" id="tab_user2" idx="2"
+                       aria-controls="home4" role="tab"
+                       data-toggle="tab"><i class="fa fa-bars" aria-hidden="true"></i> 待提交合同列表<span class="badge" id="unSubmitNum"></span></a>
+                </li>
+                <li role="presentation">
+                    <a href="#hello4" id="tab_user3" idx="3"
+                       aria-controls="hello4" role="tab"
+                       data-toggle="tab"><i class="fa fa-calculator" aria-hidden="true"></i> 计算预提租金<span class="badge" id="unSubmitNum"></span></a>
+                </li>
+            </ul>
+            <div class="tab-content" id="userList">
+                <div class="tab-pane active" id="type4" role="tabpanel">
+                    <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                        <hr class="divider-hr" />
+                        <div class="row">
+                            <div class="col-md-6" style="display: block;" id="newSupplierDiv">
+                                <div class="form-group">
+                                    <label class="control-label" for="supplyer"><strong>门店选择</strong></label>
+                                    <div class="controls">
+                                        <select class="form-control" id="supplyer"
+                                                emptyOption="false"
+                                                style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                ajaxType="post"
+                                                value="<%= userData.shopCode %>"
+                                                optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+                        <div class="row">
+                            <form action="" method="post" id="order-form">
+                                <div class="col-md-8">
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <label><strong>租金模式</strong></label>
+                                        <select class="form-control" style="min-width: 200px;"
+                                                name="status">
+                                            <option value="">--请选择--</option>
+                                            <option value="固定月租金">固定月租金</option>
+                                            <option value="固定日租金">固定日租金</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div id="dataList"></div>
+                                    </div>
+
+                                    <div class="col-md-6" style="margin-top: 50px;">
+                                        <label><strong>提成租金</strong></label>
+                                        <select class="form-control" style="min-width: 200px;"
+                                                name="status">
+                                            <option value="">--请选择--</option>
+                                            <option value="含税金额">含税金额</option>
+                                            <option value="不含税金额">不含税金额</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12" style="margin-top: 10px;">
+                                        <div id="rantList"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="box">
+                                        <div class="box-header">
+                                            <h2>门店基础信息</h2>
+                                        </div>
+                                        <div class="box-content">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>建筑面积</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control" placeholder="平方米" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>租金面积</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control" placeholder="平方米" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>使用面积</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control" placeholder="平方米" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>税&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;率</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box">
+                                        <div class="box-header">
+                                            <h2>合同信息</h2>
+                                        </div>
+                                        <div class="box-content">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>合同类型</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <select class="form-control select2-single" style="min-width: 200px;"
+                                                                name="status">
+                                                            <option value="">--请选择--</option>
+                                                            <option value="主合同">主合同</option>
+                                                            <option value="附加合同">附加合同</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>开业率条款</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <textarea type="text" class="form-control" style="min-width: 200px;"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>是否满足条款</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <select class="form-control select2-single" style="min-width: 200px;"
+                                                                name="status">
+                                                            <option value="">--请选择--</option>
+                                                            <option value="true">是</option>
+                                                            <option value="false">否</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>合同生效日</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control date-picker" data-date-format="yyyy-mm-dd" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label static-label"
+                                                       for="deliveryDate"><strong>合同失效日</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group col-sm-4">
+                                                        <input type="text" class="form-control date-picker" data-date-format="yyyy-mm-dd" style="min-width: 200px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-actions" style="margin-top: 2rem;">
+                                                <button type="button" class="btn btn-primary btn-save" data-status="1">
+                                                    保存为草稿
+                                                </button>
+                                                <button type="button" class="btn btn-inverse btn-save" data-status="2">
+                                                    保存并提交到SAP
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="home4" role="tabpanel">
+                    <hr class="divider-hr" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row" id="dataToSap">
+                                <button type="button" class="btn btn-outline green btn_upload" style="margin-right: 20px;float: right"><i class="fa fa-cloud-upload"></i> 提交数据至SAP</button>
+                            </div>
+                            <div id="finishList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="hello4" role="tabpanel">
+                    <hr class="divider-hr" />
+                    <div class="row">
+                        <div class="col-md-3" style="display: block;" id="newSupplierDiv">
+                            <div class="form-group">
+                                <label class="control-label" for="supplyer"><strong>门店选择</strong></label>
+                                <div class="controls">
+                                    <select class="form-control" id="supplyer">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="display: block;" id="newSupplierDiv">
+                            <div class="form-group">
+                                <label class="control-label" for="supplyer"><strong>预提租金计算开始日期</strong></label>
+                                <div class="controls">
+                                    <input class="form-control" id="supplyer">
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="display: block;" id="newSupplierDiv">
+                            <div class="form-group">
+                                <label class="control-label" for="supplyer"><strong>预提租金计算结束日期</strong></label>
+                                <div class="controls">
+                                    <input class="form-control" id="supplyer">
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3" style="display: block;" id="newSupplierDiv">
+                            <div class="form-group">
+                                <label class="control-label" for="supplyer"><strong>本次过账日期</strong></label>
+                                <div class="controls">
+                                    <input class="form-control" id="supplyer">
+                                    </input>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row" id="dataToSap">
+                                <button type="button" class="btn btn-outline green btn_upload" style="margin-right: 20px;float: right"><i class="fa fa-cloud-upload"></i>确认过账至SAP</button>
+                            </div>
+                            <div id="calList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+</body>
+</html>
