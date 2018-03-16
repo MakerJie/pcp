@@ -1,0 +1,246 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+    <style>
+        .badge {
+            background-color: #ff5454;
+            color: white;
+        }
+
+        .static-label {
+            line-height: 32px !important;
+        }
+    </style>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include omsMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb list">
+                    <li><a href="<%= ctx %>/oms/index">消费订单</a></li>
+                    <li><a href="#">门店对账</a></li>
+                </ol>
+            </div>
+            <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                <li role="presentation" class="active">
+                    <a href="#type4" id="tab_user1" idx="1"
+                       aria-controls="type4" role="tab"
+                       data-toggle="tab"><i class="fa fa-trello icon-menu"></i>门店应收对账 </a>
+                </li>
+                <li role="presentation">
+                    <a href="#home4" id="tab_user2" idx="2"
+                       aria-controls="home4" role="tab"
+                       data-toggle="tab"><i class="fa  fa-behance-square" aria-hidden="true"></i> 门店现金对账<span
+                                class="badge" id="unSubmitNum"></span></a>
+                </li>
+            </ul>
+            <div class="tab-content" id="userList">
+                <div class="tab-pane active" id="type4" role="tabpanel">
+                    <hr class="divider-hr"/>
+                    <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                        <div class="row">
+                            <form action="" method="post" id="receiveForm">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>门店名称</strong></label>
+                                                <div>
+                                                    <select class="form-control" id="shopName1"
+                                                            emptyOption="true"
+                                                            name="shopName"
+                                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                            ajaxType="post"
+                                                            value="<%= userData.shopCode%>"
+                                                            optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label" for="deliveryDate"><strong>对账日期</strong></label>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="tradeDate_gt">
+                                                        <span class="input-group-addon">至</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="tradeDate_le">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>上次过账日期</strong></label>
+                                                <div>
+                                                    <input class="form-control date-picker" disabled data-date-format="yyyy-mm-dd" name="lastTime">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="display: block;margin-top: 10px">
+                                                <button type="button" class="btn btn-primary btn-query2">查询</button>
+                                                <button type="button" class="btn btn-primary btn-save2">
+                                                    保存对账
+                                                </button>
+                                            </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+
+                            <div class="col-md-12">
+                                <div id="dataList"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="home4" role="tabpanel">
+                    <hr class="divider-hr"/>
+                    <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+
+                        <div class="row">
+                            <form action="" method="post" id="order-form">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>门店名称</strong></label>
+                                                <div>
+                                                    <select class="form-control" id="shopName"
+                                                            emptyOption="true"
+                                                            name="shopName"
+                                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                            ajaxType="post"
+                                                            value="<%= userData.shopCode%>"
+                                                            optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label" for="deliveryDate"><strong>对账日期</strong></label>
+                                                <div >
+                                                    <div class="input-group">
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="businessDate_gt">
+                                                        <span class="input-group-addon">至</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="businessDate_le">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>上次过账</strong></label>
+                                                <div>
+                                                    <input class="form-control date-picker" disabled data-date-format="yyyy-mm-dd" name="lastTime">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="display: block;margin-top: 10px">
+                                                <button type="button" class="btn btn-primary btn-query">查询</button>
+                                                <button type="button" class="btn btn-primary btn-save">保存对账</button>
+                                            </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                                <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+                                <div class="col-md-12">
+                                    <div id="hqList"></div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">对账编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="data_form" class="edit-form" id="data_form" method="post" action="">
+                            <div class="form-group ">
+                                <label class="form-control-label" for="email">本次对账时间</label>
+                                <br/>
+                                <div class="form-control col-md-12">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="startCheckDate">
+                                        <span class="input-group-addon">至</span>
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="endCheckDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-save2"><i class="fa fa-dot-circle-o"></i> 确认对账</button>
+            </div>
+        </div>
+        &lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>
+    &lt;!&ndash; /.modal-dialog &ndash;&gt;
+</div>
+
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">对账编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="data_form2" class="edit-form" id="data_form2" method="post" action="">
+                            <div class="form-group ">
+                                <label class="form-control-label" for="email">本次对账时间</label>
+                                <br/>
+                                <div class="form-control col-md-12">
+                                    <div class="input-group">
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="startCheckDate">
+                                        <span class="input-group-addon">至</span>
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd" name="endCheckDate">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-save"><i class="fa fa-dot-circle-o"></i> 确认对账</button>
+            </div>
+        </div>
+        &lt;!&ndash; /.modal-content &ndash;&gt;
+    </div>
+    &lt;!&ndash; /.modal-dialog &ndash;&gt;
+</div>-->
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+</body>
+</html>

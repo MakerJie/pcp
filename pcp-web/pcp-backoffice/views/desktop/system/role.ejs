@@ -1,0 +1,185 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "系统管理", txt2 = "角色管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/css/multiple-select.css" rel="stylesheet">
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">角色名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">角色编码</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query">
+                                                            <i class="fa fa-search"></i> 查询
+                                                        </button>
+                                                        <button type="button" class="btn btn-inverse btn_add">
+                                                            <i class="fa fa-plus-circle"></i> 新增角色
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade pop-win" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">角色编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 450px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="data_form" class="edit-form" id="data_form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <input type="hidden" name="permits"/>
+                            <div class="form-group">
+                                <label class="form-control-label" for="code">角色编码</label>
+                                <input type="text" class="form-control" id="code" name="code"
+                                       style="background-color: white" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="name">角色名称</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">角色权限</label>
+                                <select name="_permits" multiple id="permits_select"
+                                        style="height: 300px;width: 100%;">
+                                    <option class="permitsOpt" value="40:_crm:会员与营促销">会员与营促销</option>
+                                    <option class="permitsOpt" value="401:crm_user:会员列表:trello">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会员列表
+                                    </option>
+                                    <option class="permitsOpt" value="403:crm_message:金玉良言:file">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金玉良言
+                                    </option>
+                                    <option class="permitsOpt" value="450:crm_levelManage:卡等级管理:gavel">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;卡等级管理
+                                    </option>
+                                    <option class="permitsOpt" value="460:crm_userPoint:积分变动流水:stack-overflow">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分变动流水
+                                    </option>
+                                    <option class="permitsOpt" value="470:crm_pointStoreType:积分商城:trello">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积分商城
+                                    </option>
+                                    <option class="permitsOpt" value="480:crm_advertise:页面管理:stack-overflow">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页面管理
+                                    </option>
+                                    <option class="permitsOpt" value="490:crm_reward:活动管理:gavel">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;活动管理
+                                    </option>
+                                    <option class="permitsOpt" value="500:crm_saverTicket:优惠券管理:stack-overflow">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优惠券管理
+                                    </option>
+                                    <option class="permitsOpt" value="510:crm_ticketDetail:优惠券下发明细:stack-overflow">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;优惠券下发明细
+                                    </option>
+                                    <option class="permitsOpt" value="515:crm_qrcode:二维码管理:window-maximize">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二维码管理
+                                    </option>
+
+
+
+                                    <option class="permitsOpt" value="90:_system:系统管理">系统管理</option>
+                                    <option class="permitsOpt" value="910:system_account:账号管理:window-maximize">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;帐号管理
+                                    </option>
+                                    <option class="permitsOpt" value="920:system_role:角色管理:user-circle-o">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色管理
+                                    </option>
+                                    <option class="permitsOpt" value="930:system_shop:门店列表:trello">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门店列表
+                                    </option>
+                                    <option class="permitsOpt" value="940:system_loginLog:登陆日志:key">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登陆日志
+                                    </option>
+                                    <option class="permitsOpt" value="950:system_operationLog:操作日志:gavel">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;操作日志
+                                    </option>
+                                    <option class="permitsOpt" value="970:system_suggestion:意见与建议:commenting">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;意见与建议
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/js/multiple-select.js"></script>
+</body>
+</html>

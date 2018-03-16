@@ -1,0 +1,174 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "消费订单", txt2 = "应收对账与查询";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i
+                                                    class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店名称</span>
+                                                        <select class="form-control" id="shopName2"
+                                                                emptyOption="true"
+                                                                name="shopCode"
+                                                                style="padding: 0 0.75rem;min-width: 120px;"
+                                                                ajaxType="post"
+                                                                value="<%= userData.shopCode %>"
+                                                                optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">创建日期</span>
+                                                        <div class="input-group">
+                                                            <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                                   name="createTime_gt">
+                                                            <span class="input-group-addon">至</span>
+                                                            <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                                   name="createTime_le">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">上次过账日期</span>
+                                                        <input class="form-control date-picker" disabled data-date-format="yyyy-mm-dd"
+                                                               id="lastPassDate">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-2">
+                                                    <button type="button" class="btn btn-primary btn-select">查询</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="box">
+                                <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                                    <li role="presentation" class="active">
+                                        <a href="#type4" id="tab_user1" idx="1"
+                                           aria-controls="type4" role="tab"
+                                           data-toggle="tab"><i class="fa fa-glass" aria-hidden="true"></i> <strong>待过账单据</strong></a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#hello4" id="tab_user2" idx="2"
+                                           aria-controls="hello4" role="tab"
+                                           data-toggle="tab"><i class="fa fa-bars" aria-hidden="true"></i> <strong>全部单据</strong></a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="type4" role="tabpanel">
+                                        <hr class="divider-hr"/>
+                                        <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="hqList"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="hello4" role="tabpanel">
+                                        <hr class="divider-hr"/>
+                                        <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                                            <div id="hqList2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="matModal" tabindex="-1" role="dialog" aria-labelledby=matModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1000px;top: 0;right: 15px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">待过账数据</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="editList" class="fix-height-list"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary checkSave">
+                    保存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="matModal2" tabindex="-1" role="dialog" aria-labelledby=matModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1000px;top: 0;right: 15px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">已过账数据</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="editList2" class="fix-height-list"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

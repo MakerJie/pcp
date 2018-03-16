@@ -1,0 +1,501 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "活动管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.css"
+          rel="stylesheet">
+    <style>
+        .form-group .input-group {
+            width: 100%;
+        }
+
+        .atype {
+            display: none;
+        }
+
+        .qcondion {
+            display: none;
+        }
+
+        .btn_col_shopCode, .btn_col_product {
+            padding: 5px 12px !important;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">活动名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询"
+                                                               class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">活动类别</span>
+                                                        <select class="form-control authorityType" name="type"
+                                                                options="activityType"
+                                                                id='querySelect'>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn_query"><i
+                                                                class="fa fa-search"></i> 查询
+                                                    </button>
+                                                    <button type="button" class="btn btn-inverse btn_add"><i
+                                                                class="fa fa-plus-circle"></i> 新增
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">会员活动编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="id"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">活动名称</label>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">活动类别</label>
+                                <div class="controls">
+                                    <div class="input-group ">
+                                        <select class="form-control authorityType" name="type" id="atypeSelect"
+                                                options="activityType"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">关联二维码</label>
+                                <select class="form-control"
+                                        name="qrcodeId"
+                                        id="qrSelect"
+                                        ajaxType="post"
+                                        optionParam=''
+                                        codeField="id" nameField="name"
+                                        optionParam='{"properties":{"status":1}}'
+                                        optionUrl="/api/f335f040428f48e78f2e75152ec835f5">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">活动日期</label>
+                            <div class="input-group">
+                                <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                       name="beginTime">
+                                <span class="input-group-addon">至</span>
+                                <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                       name="endTime">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row qcondion">
+                        <div class="col-md-12"
+                             style="height: 10px;border-top: 1px solid lightgray;margin-top: 6px;">
+
+                        </div>
+                        <div class="col-md-12">
+                            <label>会员等级</label>
+                            <ul class="list-inline" id="cardLevelSelect">
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox1" value="1" type="checkbox">
+                                        <label for="checkbox1"> 蓝卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox2" value="2" type="checkbox">
+                                        <label for="checkbox2"> 金卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox3" value="3" type="checkbox">
+                                        <label for="checkbox3"> 铂金卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox4" value="4" type="checkbox">
+                                        <label for="checkbox4"> 黑卡 </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <label>是否爱品酒</label>
+                            <select class="form-control" name="tasting" id="tastingSel" options="decide"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>性别</label>
+                            <select class="form-control" name="sex" id="sexSel" options="sex"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>我想参加</label>
+                            <select class="form-control" name="wantArea" id="wantAreaSel" data-placeholder="请选择...">
+                                <option value="">--请选择--</option>
+                                <option value="新品试吃">新品试吃</option>
+                                <option value="儿童披萨制作派对">儿童披萨制作派对</option>
+                                <option value="交友派对">交友派对</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>入会年数</label>
+                            <input type="number" name="joinYear" id="joinYearIn" placeholder="0为当年,1为一年前"
+                                   class="form-control"/>
+                        </div>
+                        <div class="col-md-12">
+                            <label>会员星座</label>
+                            <select class="select2 m-b-10 select2-multiple" style="width: 100%;" multiple="multiple"
+                                    name="constellation" id="constellationSel" data-placeholder="请选择...">
+                                <option value="白羊座">白羊座</option>
+                                <option value="金牛座">金牛座</option>
+                                <option value="双子座">双子座</option>
+                                <option value="巨蟹座">巨蟹座</option>
+                                <option value="狮子座">狮子座</option>
+                                <option value="处女座">处女座</option>
+                                <option value="天秤座">天秤座</option>
+                                <option value="天蝎座">天蝎座</option>
+                                <option value="射手座">射手座</option>
+                                <option value="摩羯座">摩羯座</option>
+                                <option value="水瓶座">水瓶座</option>
+                                <option value="双鱼座">双鱼座</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label>标签</label>
+                            <select class="select2 m-b-10 select2-multiple tagSelect" style="width: 100%;"
+                                    multiple="multiple"
+                                    name="userTag" id="userTagSel" data-placeholder="请选择...">
+                                <option value="素食主义">素食主义</option>
+                                <option value="无肉不欢">无肉不欢</option>
+                                <option value="修身达人">修身达人</option>
+                                <option value="修图狂人">修图狂人</option>
+                                <option value="选择困难症">选择困难症</option>
+                                <option value="甜品控">甜品控</option>
+                                <option value="溜娃负责人">溜娃负责人</option>
+                                <option value="无辣不欢">无辣不欢</option>
+                                <option value="仪式感">仪式感</option>
+                                <option value="懒癌晚期">懒癌晚期</option>
+                                <option value="爱电商">爱电商</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>菜品偏好</label>
+                            <select class="select2 m-b-10 select2-multiple foodFaver" style="width: 100%;"
+                                    multiple="multiple"
+                                    name="preference" id="preferenceSel" data-placeholder="请选择...">
+                                <option value="披萨">披萨</option>
+                                <option value="意面">意面</option>
+                                <option value="沙拉">沙拉</option>
+                                <option value="海鲜">海鲜</option>
+                                <option value="牛排">牛排</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>生日月</label>
+                            <select class="select2 m-b-10 select2-multiple" style="width: 100%;" multiple="multiple"
+                                    name="birthMonth" id="birthMonthSel" data-placeholder="请选择...">
+                                <option value="1">一月</option>
+                                <option value="2">二月</option>
+                                <option value="3">三月</option>
+                                <option value="4">四月</option>
+                                <option value="5">五月</option>
+                                <option value="6">六月</option>
+                                <option value="7">七月</option>
+                                <option value="8">八月</option>
+                                <option value="9">九月</option>
+                                <option value="10">十月</option>
+                                <option value="11">十一月</option>
+                                <option value="12">十二月</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row order">
+                        <div class="col-md-12"
+                             style="height: 10px;border-top: 1px solid lightgray;margin-top: 6px;">
+
+                        </div>
+                        <div class="col-md-12">
+                            <label>消费门店</label>
+                            <div class="input-group">
+                                <input class="form-control" readonly="" placeholder="请选择..." id="shopCode"
+                                       name="shopCode" type="text">
+                                <span class="input-group-btn"><button class="btn btn-default btn_col_shopCode"
+                                                                      type="button">选择</button></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label>消费餐段</label>
+                            <select class="select2 m-b-10 select2-multiple foodFaver" style="width: 100%;"
+                                    multiple="multiple"
+                                    options="posPeriod"
+                                    emptyOption="false"
+                                    name="period" id="periodSel" data-placeholder="请选择...">
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>消费金额大于</label>
+                            <input type="number" name="payAmount" id="payAmountIn" placeholder="订单支付的金额"
+                                   class="form-control"/>
+                        </div>
+                        <div class="col-md-12">
+                            <label>消费菜品</label>
+                            <div class="input-group">
+                                <input class="form-control" readonly="" placeholder="请选择..." id="productCode"
+                                       name="productCode" type="text">
+                                <span class="input-group-btn"><button class="btn btn-default btn_col_product"
+                                                                      type="button">选择</button></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12"
+                             style="height: 10px;border-top: 1px solid lightgray;margin-top: 6px;"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">奖励积分</label>
+                                <input type="number" id="pointValue" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="toCardDiv">
+                            <div class="form-group">
+                                <label class="control-label">入会等级</label>
+                                <select name="toCard" id="toCardSel" class="form-control" options="userLevel"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">奖励券</label>
+                                <div class="row couponRow couponRow0">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput"
+                                               placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow1" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput"
+                                               placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow2" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput"
+                                               placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow3" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput"
+                                               placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<div class="modal fade" id="shopDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 750px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">门店选择</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <input type="text" id="shopName" placeholder="模糊查询"
+                               class="form-control"
+                               value=""/>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-default btn_shop_query"><i
+                                    class="fa fa-search"></i> 查询
+                        </button>
+                    </div>
+                </div>
+                <div id="shopList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info btn_shop_select"><i class="fa fa-dot-circle-o"></i> 确定选择
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="relUserWin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 650px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">活动用户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="rewardUserList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div id="exData"></div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/zh-CN.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        ,pageName="处理满意度";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/jquery-pingfen/css/examples.css"
+          rel="stylesheet">
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        p{
+            text-indent: 2rem;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="rights" style="width: 100%;height: 100%;">
+                <div class="top_img"></div>
+                <div class="center_img">
+                    <form id="data_form">
+                        <input type="hidden" name="id"/>
+                        <input type="hidden" name="cardNo"/>
+                        <input type="hidden" name="userName"/>
+                        <input type="hidden" name="mobile"/>
+                        <input type="hidden" name="shopName"/>
+                        <input type="hidden" name="email"/>
+                        <input type="hidden" name="city"/>
+                        <input type="hidden" name="image"/>
+                        <input type="hidden" name="code"/>
+                        <input type="hidden" name="updator"/>
+
+                        <div style="margin-left: 10%">
+                            <div >
+                                <label>提交时间</label>
+                                <input name="createTime" style="margin-left:8px;border: none"></input>
+                            </div>
+
+                            <div style="margin-top: 10px">
+                                <label>意见类型</label>
+                                <input name="viewType" style="margin-left:8px;border: none"></input>
+                            </div>
+
+                            <div style="margin-top: 10px">
+                                <label>意见内容</label>
+                                <div class="pizza-input">
+                                    <textarea rows="2" name="viewRemark" style="width: 90%;background-color: white" disabled></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 10px">
+                                <label>回复结果</label>
+                                <div class="pizza-input">
+                                    <textarea rows="2" name="result" style="width: 90%;background-color: white" disabled></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 10px">
+                                <div>满意度</div>
+                                <select id="example-f"name="degree">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div style="margin-top: 40px;">
+                                <label>详细描述</label>
+                                <div class="pizza-input" style="margin: 4px 2px;">
+                                    <textarea rows="3" name="degreeRemark" style="width: 90%"></textarea>
+                                </div>
+                            </div>
+                            <div class="text-center"  style="margin-top: 10px">
+                                <button class="btn btn-pizza btn_save" type="button">提&nbsp;&nbsp;&nbsp;&nbsp;交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="bottom_img"></div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/jquery-pingfen/js/jquery.barrating.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/jquery-pingfen/js/examples.js"></script>
+</body>
+</html>

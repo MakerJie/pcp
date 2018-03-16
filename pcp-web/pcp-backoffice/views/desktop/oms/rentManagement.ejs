@@ -1,0 +1,293 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "消费订单", txt2 = "租金合同";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form id="query_form" action="" method="post" class="">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">合同编码</span>
+                                                        <input type="text" name="code_like" style="height: 33px;padding: 0 0.75rem;min-width: 120px;" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店名称</span>
+                                                        <select class="form-control" id="shopName1"
+                                                                emptyOption="true"
+                                                                name="shopCode"
+                                                                style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                                ajaxType="post"
+                                                                value="<%= userData.shopCode %>"
+                                                                optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-actions">
+                                                <button type="button" class="btn btn-primary btn_query">查询</button>
+                                                <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i>
+                                                    新增租金合同
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="msgTitle">合同新增</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="userForm">
+                            <input type="hidden" class="form-control" name="id">
+                            <div class="tab-content"  id="userList">
+                                <div class="tab-pane active" id="type4" role="tabpanel">
+                                    <div class="row" id="typeList" style="padding: 1rem 2rem;">
+                                            <div class="controls">
+                                                <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">门店名称</label>
+                                                    <select class="form-control" id="shopName"
+                                                            emptyOption="true"
+                                                            name="shopCode"
+                                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                            ajaxType="post"
+                                                            value="<%= userData.shopCode %>"
+                                                            optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">建筑面积</label>
+                                                    <input type="text" class="form-control" name="buildArea" placeholder=""/>
+                                                </div>
+                                                </div>
+                                                <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">租金计算面积</label>
+                                                    <input type="text" class="form-control" name="rentArea" id="rentArea" placeholder=""/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">使用面积</label>
+                                                    <input type="text" class="form-control" name="useArea" placeholder=""/>
+                                                </div>
+                                                </div>
+                                                <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">税率(%)</label>
+                                                    <input type="text" class="form-control" name="taxRate" id="contractTaxRate" placeholder=""/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">合同类型</label>
+                                                    <select class="form-control"
+                                                            name="contractType">
+                                                        <option value="">--请选择--</option>
+                                                        <option value="主合同">主合同</option>
+                                                        <option value="附加合同">附加合同</option>
+                                                    </select>
+                                                </div>
+                                                </div>
+                                                <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">合同生效日</label>
+                                                    <input type="text" name="takeEffectDate" class="form-control date-picker" data-date-format="yyyy-mm-dd">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="form-control-label">合同失效日</label>
+                                                    <input type="text" name="invalidDate" class="form-control date-picker" data-date-format="yyyy-mm-dd">
+                                                </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label class="form-control-label">是否满足条款</label>
+                                                        <select class="form-control "
+                                                                name="contentClause" id="clauseDecide" >
+                                                            <option value="">--请选择--</option>
+                                                            <option value="true">是</option>
+                                                            <option value="false">否</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label class="form-control-label">开业率条款</label>
+                                                        <textarea type="text" name="clause" class="form-control" style="height: 50px"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info center btn-save" id="saveBtn">保存
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="ruleDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width:1200px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                            <li role="presentation" class="active">
+                                <a href="#home4" id="tab_user2" idx="2"
+                                   aria-controls="home4" role="tab"
+                                   data-toggle="tab"><i class="fa fa-map-signs"></i>租金模式</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#profile4" id="tab_user3" idx="3"
+                                   aria-controls="profile4" role="tab" data-toggle="tab">
+                                    <i class="fa  fa-money" aria-hidden="true"></i> 提成租金
+                                </a>
+                            </li>
+                        </ul>
+                        <form id="userForm2">
+                            <input type="hidden" class="form-control" name="id" id="typeId">
+                            <div class="tab-content"  id="userList">
+                                <div class="tab-pane active" id="home4" role="tabpanel" >
+                                    <div class="row" id="typeList" style="padding: 1rem 2rem;">
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <div class="form-group" id="rentModel2">
+                                                    <label class="form-control-label">租金模式</label>
+                                                    <select class="form-control"
+                                                            name="rentModel" id="rentModel">
+                                                        <option value="">--请选择--</option>
+                                                        <option value="固定月租金">固定月租金</option>
+                                                        <option value="固定日租金">固定日租金</option>
+                                                    </select>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div id="editList" id="meEditList"></div>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <button type="button" class="btn btn-info" id="durationConfirm"> 计算</button>
+                                                        <div id="moneyList"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="error_message"></div>
+                                </div>
+                                <div class="tab-pane" id="profile4" role="tabpanel" >
+                                    <div class="row" id="typeList" style="padding: 1rem 2rem;">
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <div class="form-group" id="commissionRent2">
+                                                    <label class="form-control-label">提成租金</label>
+                                                    <select class="form-control"
+                                                            name="commissionRent" id="commissionRent">
+                                                        <option value="">--请选择--</option>
+                                                        <option value="含税金额">含税金额</option>
+                                                        <option value="不含税金额">不含税金额</option>
+                                                    </select>
+                                                </div>
+                                                    <div class="row">
+                                                        <div class="col-md-5" id="meRantList">
+                                                            <div id="rantList"></div>
+                                                        </div>
+                                                        <div class="col-md-7">
+                                                            <button type="button" class="btn btn-info" id="durationConfirm2">计算</button>
+                                                            <div id="moneyList2"></div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info  btn_saveRule" id="saveRule">保存
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+</body>
+</html>

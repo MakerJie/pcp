@@ -1,0 +1,358 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "会员权益设置";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/css/dropify.min.css"
+          rel="stylesheet">
+    <style>
+        .form-group .input-group {
+            width: 100%;
+        }
+
+        .atype {
+            display: none;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">权益名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询"
+                                                               class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">权益类别</span>
+                                                        <select class="form-control authorityType" name="type"
+                                                                options="authorityType"
+                                                                id='querySelect'>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary btn_query"><i
+                                                                class="fa fa-search"></i> 查询
+                                                    </button>
+                                                    <button type="button" class="btn btn-inverse btn_add"><i
+                                                                class="fa fa-plus-circle"></i> 新增
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">会员权益编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="id"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">权益名称</label>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">权益类别</label>
+                                <div class="controls">
+                                    <div class="input-group ">
+                                        <select class="form-control authorityType" name="type" id="atypeSelect"
+                                                options="authorityType"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label>会员等级</label>
+                            <ul class="list-inline" id="cardLevelSelect">
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox1" value="1"  type="checkbox">
+                                        <label for="checkbox1"> 蓝卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox2"  value="2" type="checkbox">
+                                        <label for="checkbox2"> 金卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox3" value="3" type="checkbox">
+                                        <label for="checkbox3"> 铂金卡 </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox checkbox-danger">
+                                        <input id="checkbox4" value="4" type="checkbox">
+                                        <label for="checkbox4"> 黑卡 </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="text-danger" style="font-size: 15px;"><strong><u id="rightDescription"></u></strong>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">奖励积分</label>
+                                <input type="number" id="pointValue" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">奖励券</label>
+                                <div class="row couponRow couponRow0">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput" placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow1" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput" placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow2" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput" placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                                <div class="row couponRow couponRow3" style="margin-top: 5px;">
+                                    <div class="col-md-4">
+                                        <select class="form-control couponSelect"
+                                                name="couponType"
+                                                ajaxType="post"
+                                                optionParam='{"properties":{"pageSize":1000,"_ignorePic":1,"status":1}}'
+                                                codeField="id" nameField="name"
+                                                optionUrl="/api/002e17f5d8e24e918c2ddb5ad706deb4">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="total" class="form-control totalInput"
+                                               placeholder="发放总数，小于0为不限制">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" name="num" class="form-control numInput" placeholder="每次发放张数">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">活动日期</label>
+                            <div class="input-group">
+                                <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                       name="beginTime">
+                                <span class="input-group-addon">至</span>
+                                <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                       name="endTime">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="extendModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">奖励条件</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="type2" class="atype">
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox11" value="1" type="checkbox">
+                        <label for="checkbox11"> 我想参加 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox12" value="2" type="checkbox">
+                        <label for="checkbox12"> 菜品偏好 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox13" value="3" type="checkbox">
+                        <label for="checkbox13"> 是否爱品酒 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox14" value="4" type="checkbox">
+                        <label for="checkbox14"> 标签 </label>
+                    </div>
+                </div>
+                <div id="type3" class="atype">
+                    <input type="number" id="birthDayAhead" placeholder="距离生日此天数前进行发放" class="form-control">
+                </div>
+                <div id="type4" class="atype">
+                    <select id="cardChange" class="form-control">
+                        <option value="12">蓝卡升金卡</option>
+                        <option value="23">金卡升铂金卡</option>
+                        <option value="14">蓝卡升黑卡</option>
+                    </select>
+                </div>
+                <div id="type5" class="atype">
+                    <select id="firstConsume" class="form-control">
+                        <option value="1">按金额奖励，每一元奖励积分</option>
+                        <option value="2">按条件建立，每一次奖励积分</option>
+                    </select>
+                </div>
+                <div id="type7" class="atype">
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox21" value="1" type="checkbox">
+                        <label for="checkbox21"> 周一 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox22" value="2" type="checkbox">
+                        <label for="checkbox22"> 周二 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox23" value="3" type="checkbox">
+                        <label for="checkbox23"> 周三 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox24" value="4" type="checkbox">
+                        <label for="checkbox24"> 周四 </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox25" value="5" type="checkbox">
+                        <label for="checkbox25"> 周五  </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox26" value="6" type="checkbox">
+                        <label for="checkbox26"> 周六  </label>
+                    </div>
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox27" value="7" type="checkbox">
+                        <label for="checkbox27"> 周日  </label>
+                    </div>
+                </div>
+                <div id="type8" class="atype">
+                    每
+                    <input type="number" id="monthKeep" class="form-control">
+                    月，
+                    消费
+                    <input type="number" id="countKeep" class="form-control">
+                    次
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_conf" data-type=""><i class="fa fa-dot-circle-o"></i> 确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="exData"></div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "二维码管理", pageName = "个人中心";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/weui.min.css">
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/jquery-weui.min.css">
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" id="city" value="" readonly="" placeholder="请选择城市" type="text">
+                    </div>
+                </div>
+            </div>
+            <hr style="margin: 0;"/>
+            <div class="row">
+                <div class="weui-panel__bd" id="shopData">
+                    <div class="text-center descr">请稍候，数据加载中...</div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/weui/js/jquery-weui.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/weui/js/city-picker.min.js"></script>
+</body>
+</html>
