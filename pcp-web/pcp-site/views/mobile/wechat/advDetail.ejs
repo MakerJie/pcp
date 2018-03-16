@@ -1,0 +1,45 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        pageName = "广告详情";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .card-block img {
+            width: 85%;
+            height: 160px;
+            margin: auto;
+        }
+        .level_pro_info{
+            position: absolute;
+            left: 42px;
+            top: 57px;
+            font-size: 11px;
+        }
+        .adv img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row" style="margin: 5px;padding-top: 15px;padding-bottom: 15px;">
+                <img id="imageDetail" style="width: 100%;" src="">
+            </div>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+        <% include ../common/bottom.ejs %>
+        <% include ../common/footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "广告管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/css/dropify.min.css"
+          rel="stylesheet">
+    <style>
+        span small {
+            float: right;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i
+                                                    class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form id="query_form" action="" method="post" role="form">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询"
+                                                               class="form-control" value=""/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">位置</span>
+                                                        <select class="form-control" name="position"
+                                                                options="position"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">状态</span>
+                                                        <select class="form-control" name="status"
+                                                                options="infoStatus"></select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">上架时间</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="topCarriageDate_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="topCarriageDate_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="button" class="btn btn-primary btn_query">查询</button>
+                                                    <button type="button" class="btn btn-inverse btn_add"><i
+                                                                class="fa fa-plus-circle"></i>新增
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 950px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">页面编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form name="data_form" class="edit-form" id="userForm" method="post" action="">
+                            <input type="hidden" class="form-control" name="id">
+                            <input type="hidden" class="form-control" name="frontImageData" id="frontImageDataHidden">
+                            <input type="hidden" class="form-control" name="detailImageData" id="detailImageDataHidden">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">广告名称<span style="color: red">*</span></label>
+                                        <input type="text" class="form-control" name="name"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">广告位置<span style="color: red">*</span></label>
+                                        <select class="form-control" name="position" options="position"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">当前状态</label>
+                                        <select class="form-control" name="status" options="infoStatus"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <label class="input-group-addon">上架时间<span style="color: red">*</span></label>
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                               name="topCarriageDate"/>
+                                        <span class="input-group-addon">至</span>
+                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                               name="underCarriageDate"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6">
+                        <span>前端图片<small>建议尺寸：300px*600px</small></span>
+                        <form id="frontImageDataForm">
+                            <input type="file" id="frontImageData"
+                                   name="upfile"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-2.jpg"
+                                   data-base64="" class="dropify"/>
+                        </form>
+                        <hr/>
+                        <span>详情图片<small>建议尺寸：300px*600px</small></span>
+                        <form id="detailImageDataForm">
+                            <input type="file" id="detailImageData"
+                                   name="upfile"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-2.jpg"
+                                   data-base64="" class="dropify"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+</body>
+</html>

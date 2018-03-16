@@ -1,0 +1,58 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        ,pageName="新增地址";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/weui.min.css">
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/jquery-weui.min.css">
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="address" style="min-height: 400px;">
+                <form id="data_form">
+                    <div class="common-box register-box">
+                        <div class="pizza-form-group">
+                            <label>收货人：</label>
+                            <input type="text"  name="mobile" placeholder="请输入"/>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>手机号：</label>
+                            <input type="tel" name="password" placeholder="请输入"/>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>所在地区：</label>
+                            <input type="text" id='city-picker' name="address" placeholder="请选择"/>
+                        </div>
+
+                        <div>
+                            <div>详细地址：</div>
+                            <textarea style="width: 100%;"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-pizza" id="saveForm">保&nbsp;&nbsp;&nbsp;&nbsp;存</button>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/weui/js/jquery-weui.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/weui/js/city-picker.min.js"></script>
+</body>
+</html>

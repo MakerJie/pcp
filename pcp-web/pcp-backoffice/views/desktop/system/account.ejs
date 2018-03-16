@@ -1,0 +1,199 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "系统管理", txt2 = "帐号管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" name="_sync" value="false"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">账号名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">账号编码</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">账号状态</span>
+                                                        <select class="form-control select2-single"
+                                                                name="status">
+                                                            <option value="">--请选择--</option>
+                                                            <option value="1">启用</option>
+                                                            <option value="0">禁用</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                        <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i> 新增</button>
+                                                        <button type="button" class="btn btn-mini btn-warning btn-shop-select"><i class="fa fa-plug"></i> 账号门店关联</button>
+                                                        <button type="button" class="btn btn-mini btn-info btn-account-select">
+                                                            <i class="fa fa-key"></i> 角色账号关联
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn_restpassword"><i class="fa fa-lock"></i> 密码重置</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">账号编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="data_form" class="edit-form" id="data_form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <div class="form-group">
+                                <label class="form-control-label" for="code">账号编码</label>
+                                <input type="text" class="form-control" id="code" name="code" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="name">账号名称</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="mobile">联系手机</label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label" for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder=""/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:650px;top:0;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">门店列表</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="detailContent" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div style="padding: 5px 0;">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input id="nameInput" class="form-control" placeholder="门店名称模糊搜索" name="code_like" type="text" style="padding: 5px;">
+                                        <span class="input-group-btn"><button class="btn" type="button" id="nameSelectSearch">搜索</button></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="shopListSelect"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_confirm"><i class="fa fa-dot-circle-o"></i> 确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:650px;top:0;" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="roleListSelect"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_role"><i class="fa fa-dot-circle-o"></i> 确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

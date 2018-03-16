@@ -1,0 +1,39 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        ,pageName="我的地址";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="address" style="min-height: 400px;">
+                <div class="common-box register-box">
+                    <div>张三</div>
+                    <div>上海市</div>
+                    <div class="text-right">
+                        <a><i class="fa fa-file-text-o"></i> 编辑</a>
+                        <a><i class="fa fa-trash-o"></i> 删除</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-pizza" id="addAddress">添加地址</button>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>
