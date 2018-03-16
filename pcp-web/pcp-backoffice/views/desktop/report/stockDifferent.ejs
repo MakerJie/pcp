@@ -1,0 +1,269 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "统计报表", txt2 = "库存分差报表";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/css/multiple-select.css" rel="stylesheet">
+    <style>
+        .diff-table {
+            width: 1800px;
+        }
+
+        .list-table {
+            height: 450px;
+        }
+
+        .pq {
+            color: blue;
+        }
+
+        .fetch {
+            color: dodgerblue;
+        }
+
+        .transfer {
+            color: purple;
+        }
+
+        .destroy {
+            color: #ac2925;
+        }
+
+        .theory {
+            color: darkgreen;
+        }
+
+        .ms-choice {
+            border: 0px solid #aaa;
+            line-height: 35px;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">日期区间</span>
+                                                        <% let now = new Date(),
+                                                                last = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7); %>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="startDate"
+                                                               value="<%= global.tool.dateFormatter(last, 'yyyy-MM-dd') %>">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="endDate"
+                                                               value="<%= global.tool.dateFormatter(now, 'yyyy-MM-dd') %>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">库存地点</span>
+                                                        <select class="form-control" data-placeholder="请选择..." multiple="multiple" id="purchaseShop"
+                                                                emptyOption="false"
+                                                                ajaxType="post"
+                                                                name="stockRoom"
+                                                                emptyOption="false"
+                                                                optionParam='{"properties":{"pageSize":1000,"code_in":"<%= userData.shops.join(',') %>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-inverse btn_query">
+                                                            从SAP获取结果数据
+                                                        </button>
+                                                        <button type="button" class="btn btn-warning btn_export">
+                                                            <i class="fa fa-download"></i> 导出
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div style="">
+                                <span style="margin-left:5px;">理论总金额：<span id="theoryUseMoney">0.00</span></span>
+                                <span style="margin-left:75px;">实际总金额：<span id="factUseMoney">0.00</span></span>
+                                <span style="margin-left:75px;">差异总金额：<span id="moneyDiff">0.00</span></span>
+                            </div>
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">订购物料<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div id="aList"></div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">领用物料<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="bList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">物料调拨<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="cList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">退货物料<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="dList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">损耗物料<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="eList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">理论使用量<span class="purchaseQua"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-content" style="padding: 0;">
+                        <div id="fList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/js/multiple-select.js"></script>
+</body>
+</html>

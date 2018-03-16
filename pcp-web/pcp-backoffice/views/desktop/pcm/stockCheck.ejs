@@ -1,0 +1,188 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "物料管理", txt2 = "盘点管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-up"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse in">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" name="storeCode_in" value="<%= userData.shops.join(',') %>"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">盘点单号</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">盘点日期</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="stockCheckDate_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="stockCheckDate_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">盘点状态</span>
+                                                        <select class="form-control" name="status" options="stockCheckStatus">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">盘点类型</span>
+                                                        <select class="form-control select2-single" name="type"
+                                                                options="stockCheckType">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                        <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i>
+                                                            新增物料盘点表
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn_upload" style="float: none;" disabled>
+                                                            <i class="fa fa-cloud-upload"></i> 提交盘点数据至SAP
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document"
+         style="width: 1260px;top: 0;right: 0;max-height: 690px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">数据新增</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="data_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="uid" id="hiddenUid" data-value="<%= global.tool.uuid() %>" />
+                    <input type="hidden" name="id" id="hiddenId"/>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <label class="control-label">门店</label>
+                                <select class="form-control form-control-select" id="purchaseShop"
+                                        ajaxType="post"
+                                        name="storeCode"
+                                        emptyOption="false"
+                                        optionParam='{"properties":{"pageSize":1000,"code_in":"<%= userData.shops.join(',') %>"}}'
+                                        optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">盘点类型</label>
+                                <select class="form-control" id="stockCheck" name="type" options="stockCheckType">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">盘点日期</label>
+                                <div class="controls">
+                                    <div class="input-group date">
+                                        <%
+                                        let now = new Date(), hours = now.getHours();
+                                        if (hours >= 0 && hours < 4) {
+                                            now = new Date(now.getTime()-1000*60*60*4);
+                                        }
+                                        %>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" class="form-control date-picker" id="stockcheckdateInput"
+                                               data-date="<%= global.tool.dateFormatter(now, 'yyyy-MM-dd') %>"
+                                               name="stockCheckDate"
+                                               disabled
+                                               data-date-format="yyyy-mm-dd"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group" style="padding-top: 25px">
+                                <button type="button" id="print" class="btn btn-danger pull-right"><i class="fa fa-print"></i> 打印盘点表</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="detailsList" class="fix-height-list"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="checkDiv" class="modal-footer">
+                <div class="text-danger" id="error_message_save" style="float: left;"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button id="hiddenBtn" type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i>
+                    保存
+                </button>
+                <span id="totalAmount" style="float: right;margin-right: 30px;font-size: 16px;color: #1abc9c;">0.0</span>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

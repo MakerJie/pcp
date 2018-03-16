@@ -1,0 +1,10 @@
+<div class="col-lg-2 col-md-3 hidden-xs inbox-panel">
+    <div class="list-group mail-list">
+        <% if(mdiIcon[routes[1]]){for(let n=0;n<mdiIcon[routes[1]].children.length;n++){%>
+        <a href="<%= ctx %>/<%= routes[1] %>/<%= mdiIcon[routes[1]].children[n].link %>"
+           class="list-group-item <%= mdiIcon[routes[1]].children[n].link==routes[2]?'active':'' %>">
+            <%= mdiIcon[routes[1]].children[n].text %>
+        </a>
+        <% }} %>
+    </div>
+</div>
