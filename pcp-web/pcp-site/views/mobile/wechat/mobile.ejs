@@ -1,0 +1,129 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        ,pageName="安全设置";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div style="margin-top: 50px;">
+                <!--<div class="text-center">-->
+                    <!--<button class="btn btn-pizza" id="password_modify" style="margin: 10px 0;">修改登录密码</button>-->
+                <!--</div>-->
+                <div class="text-center">
+                    <button class="btn btn-pizza" id="mobile_modify" style="margin: 10px 0;">修改绑定手机</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="userInfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="top:20%;" >
+        <div class="modal-content common-box ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">修改登录密码</h4>
+            </div>
+            <div class="modal-body">
+                <form id="data_form">
+                    <input type="hidden" name="id" value="<%= userData.id %>">
+                    <input type="hidden" name="country" value="CN">
+                    <input type="hidden" name="verifyConfirm" value="" id="verifyConfirm1">
+                    <div class="register-box" style="padding: 20px;">
+                        <div class="pizza-form-group">
+                            <label>手机号：</label>
+                            <div class="pizza-input">
+                                <input type="tel" name="mobile" id="mobileShow"/>
+                            </div>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>验证码：</label>
+                            <div class="pizza-input">
+                                <input type="text" name="verify" value="">
+                            </div>
+                            <button type="button" class="verify" id="getVerify1">获取验证码</button>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>密码设置：</label>
+                            <div class="pizza-input">
+                                <input placeholder="您的新密码" name="password"/>
+                            </div>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>确认密码：</label>
+                            <input type="text" name="confirmPassword" placeholder="确认您的新密码"/>
+                        </div>
+
+                        <div class="text-center">
+                            <button class="btn btn-pizza btn_save" type="button">确&nbsp;&nbsp;&nbsp;&nbsp;认</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="mobileInfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document" style="top:20%;" >
+        <div class="modal-content common-box ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">修改绑定手机</h4>
+            </div>
+            <div class="modal-body">
+                <form id="mobile_form">
+                    <input type="hidden" name="id" value="<%= userData.id %>">
+                    <input type="hidden" name="verifyConfirm" value="" id="verifyConfirm2">
+                    <div class="register-box" style="padding: 20px;">
+                        <div class="pizza-form-group">
+                            <label>手机号：</label>
+                            <div class="pizza-input">
+                                <input type="tel" name="mobile" id="mobileVerify"/>
+                            </div>
+                        </div>
+
+                        <div class="pizza-form-group">
+                            <label>验证码：</label>
+                            <div class="pizza-input">
+                                <input type="text" name="verify" value="">
+                            </div>
+                            <button type="button" class="verify" id="getVerify2">获取验证码</button>
+                        </div>
+
+                        <div class="text-center">
+                            <button class="btn btn-pizza btn_saveMobile" type="button">确&nbsp;&nbsp;&nbsp;&nbsp;认</button>
+                            <p id="errorMsg" style="color: red;font-weight: 700;">&nbsp;</p>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "每日签到";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .panTitle{
+            width: 240px;
+            height: 40px;
+            position: relative;
+            background: url(<%= global.config.publicPath %>/page/images/lucky/panTitle.png) no-repeat;
+            background-size: 100% 100%;
+            text-align: center;
+            line-height: 40px;
+            font-size: 25px;
+            color: #014288;
+            margin: 0 auto;
+        }
+        .panPanel{
+            width: 260px;
+            height: 280px;
+            margin: 30px auto;
+            position: relative;
+        }
+        .pan{
+            width: 260px;
+            height: 260px;
+            position: relative;
+            background:url(<%= global.config.publicPath %>/page/images/lucky/bgIcon.png) no-repeat #ffffff;
+            background-size: 100%;
+            border-radius: 50%;
+        }
+        .pan .prize{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top:0;
+            left:0;
+            text-align: center;
+            border-radius: 50%;
+        }
+        .pan .prize img.prizeIcon{
+            display: block;
+            margin: 15px auto 0px;
+            width: 50px;
+        }
+        .pan .prize .prizeNum{
+            color: #e7bf88;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .pan .prize.prize1{
+
+        }
+        .pan .prize.prize2{
+            transform: rotate(60deg);
+        }
+        .pan .prize.prize3{
+            transform: rotate(120deg);
+        }
+        .pan .prize.prize4{
+            transform: rotate(180deg);
+        }
+        .pan .prize.prize5{
+            transform: rotate(240deg);
+        }
+        .pan .prize.prize6{
+            transform: rotate(300deg);
+        }
+        .index{
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 70px;
+            margin-left: -35px;
+            margin-top: -40px;
+        }
+        .panCount{
+            width: 160px;
+            height: 85px;
+            position: relative;
+            background: url(<%= global.config.publicPath %>/page/images/lucky/panCount.png) no-repeat;
+            background-size: 100% 100%;
+            text-align: center;
+            line-height: 30px;
+            font-size: 18px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        .panCount span{
+            margin: 0 5px;
+            color: #0b0b0b;
+        }
+    </style>
+</head>
+<body>
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+
+            <div class="panTitle">
+                签到有礼
+            </div>
+
+            <div class="panPanel">
+                <div id="lottyImage"  class="pan">
+                    <div class="prize prize1">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon1.png" class="prizeIcon" />
+                        <span class="prizeNum">5</span>
+                    </div>
+                    <div class="prize prize2">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon2.png" class="prizeIcon" />
+                        <span class="prizeNum">200</span>
+                    </div>
+                    <div class="prize prize3">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon3.png" class="prizeIcon" />
+                        <span class="prizeNum">10</span>
+                    </div>
+                    <div class="prize prize4">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon1.png" class="prizeIcon" />
+                        <span class="prizeNum">5</span>
+                    </div>
+                    <div class="prize prize5">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon4.png" class="prizeIcon" />
+                        <span class="prizeNum">50</span>
+                    </div>
+                    <div class="prize prize6">
+                        <img src="<%= global.config.publicPath %>/page/images/lucky/prizeIcon5.png" class="prizeIcon" />
+                        <span class="prizeNum">20</span>
+                    </div>
+                </div>
+                <img src="<%= global.config.publicPath %>/page/images/lucky/index.png" class="index" />
+            </div>
+
+            <div class="panCount">
+                今日已抽<span id="todayCount">0</span>次<br/>
+                还剩<span id="remainCount">1</span>次机会
+            </div>
+            <div class="text-center">
+                <button class="btn btn-pizza btn_u" id="lotteryBtn" data-coupon="" data-user="" type="button"
+                        style="margin-top: 20px;">立即签到
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div id="pageData" data-time="<%= global.tool.dateFormatter(new Date(),'yyyy-MM-dd') %>"></div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/js/jQueryRotate.js"></script>
+</body>
+</html>

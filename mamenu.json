@@ -1,0 +1,97 @@
+{
+  "button": [
+    {
+      "name": "会员中心",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "我的会员",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx506f4b12c6e6292a&redirect_uri=http%3a%2f%2fscrm.pizzaexpress.cn%2fsite%2fview%2fwechat%2fhome&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "我的优惠",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx506f4b12c6e6292a&redirect_uri=http%3a%2f%2fscrm.pizzaexpress.cn%2fsite%2fview%2fwechat%2fcoupon&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "每日签到",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx506f4b12c6e6292a&redirect_uri=http%3a%2f%2fscrm.pizzaexpress.cn%2fsite%2fview%2fwechat%2flucky&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "金玉良言",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx506f4b12c6e6292a&redirect_uri=http%3a%2f%2fscrm.pizzaexpress.cn%2fsite%2fview%2fwechat%2fmessage&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+          "sub_button": []
+        }
+      ]
+    },
+    {
+      "name": "关于我们",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "我们的门店",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx506f4b12c6e6292a&redirect_uri=http%3a%2f%2fscrm.pizzaexpress.cn%2fsite%2fview%2fwechat%2fshop&response_type=code&scope=snsapi_base&state=1002#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "我们的故事",
+          "url": "http://wechat-pizzaexpress.cn/phone/story.aspx",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "我们的食材",
+          "url": "http://wechat-pizzaexpress.cn/phone/food.aspx",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "工作机会",
+          "url": "http://wechat-pizzaexpress.cn/phone/job.aspx",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "新闻动态",
+          "url": "http://wechat-pizzaexpress.cn/phone/new.aspx",
+          "sub_button": []
+        }
+      ]
+    },
+    {
+      "name": "惊喜活动",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "Marzano GO | 玛尚购",
+          "url": "http://mp.weixin.qq.com/bizmall/mallshelf?id=t=mall/listbiz=MzA5NDI2MTEyMA==shelf_id=4showwxpaytitle=1#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "美味外送",
+          "url": "http://wm.wechat-pizzaexpress.cn/mendian_list_new.php",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "最新优惠",
+          "url": "http://wechat-pizzaexpress.cn/phone/favorable.aspx",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "派对预定",
+          "url": "http://wechat-pizzaexpress.cn/phone/party.aspx",
+          "sub_button": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,367 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "金玉良言";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/css/dropify.min.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.css"
+          rel="stylesheet">
+    <style>
+        .form-group .input-group {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="i-action ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">服务单号</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">提交时间</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="createTime_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="createTime_le">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="input-group ">
+                                                        <span class="input-group-addon">门店名称</span>
+                                                        <input type="text" name="shopName_like" placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">手机号</span>
+                                                        <input type="text" name="mobile_like" placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">意见类型</span>
+                                                        <select class="select2 m-b-10 select2-multiple viewTypeSelect"
+                                                                style="width: 100%" multiple="multiple"
+                                                                name="viewType_like" data-placeholder="请选择...">
+                                                            <option value="意见">意见</option>
+                                                            <option value="咨询">咨询</option>
+                                                            <option value="表扬">表扬</option>
+                                                            <option value="投诉">投诉</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query">查询
+                                                        </button>
+                                                        <!--  <button type="button" class="btn btn-inverse btn_add"><i
+                                                                      class="fa fa-plus-circle"></i> 新增
+                                                          </button>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1000px;top: 0%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">会员留言详情</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="id"/>
+                    <div class="tab-pane active">
+                        <span style="padding-left: 1%;font-size: 20px;">服务单详情</span><br>
+                        <div class="row" style="padding-left: 5%;padding-top: 10px">
+                            <div class="form-group">
+                                <div class="controls">
+
+                                    <div class="col-md-4">
+                                        <p>
+                                            <strong class="text-lg-center">会员卡号</strong>&nbsp;
+                                            <span name="cardNo"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">用户名</strong>&nbsp;
+                                            <span name="userName"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">手机号</strong>&nbsp;
+                                            <span name="mobile"></span>
+                                        </p>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <strong class="text-lg-center">提交时间</strong>&nbsp;
+                                            <span name="createTime"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">消费门店</strong>&nbsp;
+                                            <span name="shopName"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">邮箱</strong>&nbsp;
+                                            <span name="email"></span>
+                                        </p>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <strong class="text-lg-center">消费城市</strong>&nbsp;
+                                            <span name="city"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">意见类型</strong>&nbsp;
+                                            <span name="viewType"></span>
+                                        </p>
+
+                                        <p>
+                                            <strong class="text-lg-center">附件</strong>&nbsp;
+                                            <img id="fImage" class="img-responsive" style="width: 60px;" src=""/>
+                                        </p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 5%">
+                        <div class="col-md-11">
+                            <strong class="text-lg-center">详细描述</strong><br>
+                            <span name="viewRemark"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <span style="padding-left: 1%;font-size: 20px;">回复处理</span><br>
+                    <div class="row" style="padding-left: 5%;padding-top: 10px">
+                        <div class="col-md-6">
+                            <p>
+                                <strong class="text-lg-center">服务单号</strong>&nbsp;
+                                <span name="code"></span>
+                            </p>
+                            <p>
+                                <strong class="text-lg-center">回复人</strong>&nbsp;
+                                <span name=""><%= userData.userName %></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 5%">
+                        <div class="col-md-11">
+                            <div class="form-group">
+                                <strong class="text-lg-center">回复内容</strong>
+                                <div class="controls">
+                                    <div class="input-group ">
+                                        <textarea class="form-control " name="result"
+                                                  style="width: 830px;height: 80px; background-color: white;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="replyDiv" style="display: none">
+                        <hr>
+                        <span style="padding-left: 1%;font-size: 20px;">回复满意度</span><br>
+                        <div class="row" style="padding-left: 5%;padding-top: 10px">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong class="text-lg-center">回复满意度</strong>&nbsp;
+                                    <span name="degree"></span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-left: 5%">
+                            <div class="col-md-11">
+                                <strong class="text-lg-center">回复满意度详细描述</strong><br>
+                                <textarea class="form-control " name="degreeRemark"
+                                          style="width: 830px;height: 80px; background-color: white;"
+                                          disabled></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" id="btnDiv" class="btn btn-primary btn_receive"><i class="fa fa-dot-circle-o"></i>
+                    回复
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">留言新增</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="id"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="file" id="image" class="dropify"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-1.jpg"/>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">用户名</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <input type="text" class="form-control " name="userName"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px">
+                                    <div class="form-group">
+                                        <label class="control-label">门店名称</label>
+                                        <div class="input-group ">
+                                            <select class="form-control" id="shopName1"
+                                                    emptyOption="true"
+                                                    name="shopCode"
+                                                    style="padding: 0 0.75rem;"
+                                                    ajaxType="post"
+                                                    value="<%= userData.shopCode %>"
+                                                    optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                    optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px">
+                                    <div class="form-group">
+                                        <label class="control-label">意见类型</label>
+                                        <div class="input-group ">
+                                            <select class="select2 m-b-10 select2-multiple viewTypeSelect"
+                                                    style="width: 100%" multiple="multiple" name="viewType"
+                                                    data-placeholder="请选择...">
+                                                <option value="意见">意见</option>
+                                                <option value="咨询">咨询</option>
+                                                <option value="表扬">表扬</option>
+                                                <option value="投诉">投诉</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">意见详情</label>
+                                <div class="controls">
+                                    <div class="input-group ">
+                                        <textarea type="text" class="form-control " style="height: 100px"
+                                                  name="viewRemark"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="checkDiv" class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.js"></script>
+</body>
+</html>

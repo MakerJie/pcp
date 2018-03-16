@@ -1,0 +1,202 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "会员等级";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/css/dropify.min.css"
+          rel="stylesheet">
+    <style>
+        .form-group .input-group {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">卡等级</span>
+                                                        <select class="form-control" name="cardLevel"
+                                                                options="userLevel"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">参与升降级</span>
+                                                        <select class="form-control" name="fluctuate"
+                                                                options="decide"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i
+                                                                    class="fa fa-search"></i> 查询
+                                                        </button>
+                                                        <button type="button" class="btn btn-inverse btn_add"><i
+                                                                    class="fa fa-plus-circle"></i> 新增
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">卡等级设置</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <form id="cardImageForm">
+                            <input type="file" id="cardImage" class="dropify"
+                                   name="upfile"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-1.jpg"/>
+                            <div>建议尺寸：600px*300px</div>
+                        </form>
+                    </div>
+                    <form id="data_form" class="edit-form" method="post" action="">
+                        <input type="hidden" name="id"/>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">卡等级</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <select class="form-control"
+                                                        id="userLevelSel" name="cardLevel"
+                                                        options="userLevel"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">是否参与升降级</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <select class="form-control" name="fluctuate"
+                                                        options="decide"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">升级值</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <input type="text" class="form-control " name="quota"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">保级值</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <input type="text" class="form-control " name="safeguard"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">折扣率(%)</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <input type="text"
+                                                       class="form-control " name="discount"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">1元积分值</label>
+                                        <div class="controls">
+                                            <div class="input-group ">
+                                                <input type="text" class="form-control "
+                                                       name="cent"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="image" id="imageHidden" />
+                    </form>
+                </div>
+            </div>
+            <div id="checkDiv" class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+</body>
+</html>

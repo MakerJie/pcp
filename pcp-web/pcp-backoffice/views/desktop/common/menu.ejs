@@ -1,0 +1,73 @@
+<!-- Left navbar-header -->
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav">
+        <div class="sidebar-head">
+            <h3><span class="fa-fw open-close"><i class="ti-menu hidden-xs"></i><i
+                            class="ti-close visible-xs"></i></span>
+                <span class="hide-menu">Navigation</span></h3></div>
+        <ul class="nav" id="side-menu">
+            <li><a href="<%= ctx %>/index" class="waves-effect">
+                    <i class="mdi mdi-home fa-fw"></i>
+                    <span class="hide-menu">主页</span>
+                </a>
+            </li>
+            <%
+            mdiIcon = {
+                pms: {icon: 'mdi mdi-cart-outline ', text: '', children: []},
+                pcm: {icon: 'mdi mdi-content-copy ', text: '', children: []},
+                oms: {icon: 'mdi mdi-clipboard-text ', text: '', children: []},
+                report: {icon: 'mdi mdi-table ', text: '', children: []},
+                crm: {icon: 'mdi mdi-account-star ', text: '', children: []},
+                system: {icon: 'mdi mdi-settings ', text: '', children: []}
+            };
+            let topMenu = {}, secondMenu = {};
+            if (session.roleData) {
+                for (let i = 0; i < session.roleData.length; i++) {
+                    let tmp = session.roleData[i].split(':'), code;
+                    if (tmp[1].startsWith("_")) {
+                        code = tmp[1].substring(1);
+                        if (!topMenu[code])
+                            topMenu[code] = true;
+                        if (mdiIcon[code])
+                            mdiIcon[code].text = tmp[2];
+                    } else {
+                        if (!secondMenu[tmp[1]]) {
+                            secondMenu[tmp[1]] = true;
+                            let tt = tmp[1].split('_');
+                            if (mdiIcon[tt[0]]) {
+                                mdiIcon[tt[0]].children.push({
+                                    icon: tmp[3],
+                                    text: tmp[2],
+                                    link: tt[1]
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            %>
+            <% for(let key in topMenu){ %>
+            <li class="devider"></li>
+            <li class="menuItem" id="top_<%= key %>">
+                <a href="javascript:void(0);" class="waves-effect <%= key == routes[1] ? 'active' : '' %>">
+                    <i class="<%= mdiIcon[key].icon %> fa-fw"></i>
+                    <span class="hide-menu"> <%= mdiIcon[key].text %>
+                        <span class="fa arrow"></span>
+                        </span>
+                </a>
+                <ul class="nav nav-second-level two-li">
+                    <% for(let j = 0;j < mdiIcon[key].children.length;j++){ let jj = j + 1; %>
+                    <li>
+                        <a href="<%= ctx %>/<%= key %>/<%= mdiIcon[key].children[j].link %>">
+                            <i class="fa-fw"><%= jj > 9 ? jj : ('0' + jj); %></i>
+                            <span class="hide-menu"><%= mdiIcon[key].children[j].text %></span>
+                        </a>
+                    </li>
+                    <% } %>
+                </ul>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+</div>
+<!-- Left navbar-header end -->

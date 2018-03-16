@@ -1,0 +1,50 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "积分商城";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid" style="font-size: 15px;">
+            <div class="coupon-tab hor-tab">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="block1 page-link <%= (queryData.type==1?'mall-active':'') %>" data-link="<%= ctx %>/wechat/mall?type=1">
+                            积分<br/>商城
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block1 page-link <%= (queryData.type==2?'mall-active':'') %>" data-link="<%= ctx %>/wechat/mall?type=2">
+                            生活<br/>服务
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block1 page-link" data-link="<%= ctx %>/wechat/point">
+                            积分<br/>明细
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="productData">
+
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div id="pageData" data-pre="<%= global.config.publicPath %> %>"></div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

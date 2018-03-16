@@ -1,0 +1,267 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "物料管理", txt2 = "物料主数据";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">物料名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">物料编号</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                        <button type="button" class="btn btn-inverse btn_sync">同步SAP SKU物料数据</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1000px;top:0;">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 5px;">
+
+                <div class="row" id="detailContent">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                                    <li role="presentation" class="active">
+                                        <a href="#type4" id="tab1" idx="1"
+                                           aria-controls="type4" role="tab"
+                                           data-toggle="tab"><i class="fa fa-edit"></i>物料数据</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#home4" id="tab2" idx="2"
+                                           aria-controls="home4" role="tab"
+                                           data-toggle="tab" class="btn_pricesync"><i class="fa fa-money"></i>价格数据</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#profile4" id="tab3" idx="3"
+                                           aria-controls="profile4" role="tab" data-toggle="tab">
+                                            <i class="fa fa-truck"></i> 可销售门店
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="type4" role="tabpanel">
+
+                                        <form id="data_form" class="edit-form" method="post" action="">
+                                            <input type="hidden" name="id"/>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">物料名称</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" name="name" class="form-control" value=""
+                                                                   placeholder=""/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">物料编码</label>
+                                                        <div class="col-sm-7">
+                                                            <span name="code"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">标准单位</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control select2-single"
+                                                                    options="standardUnit"
+                                                                    name="unit" id="unit">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">计量单位</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control select2-single"
+                                                                    options="measureUnit"
+                                                                    name="measureUnit">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">单位换算</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" name="unitRate" class="form-control"
+                                                                   placeholder="计量单位/标准单位"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">保质周期</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" name="shelfLife" class="form-control"
+                                                                   placeholder=""/>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control select2-single"
+                                                                    options="shelfUnit"
+                                                                    name="shelfUnit" id="shelfUnit">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">储存条件</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control select2-single"
+                                                                    name="temperature" id="temperature"
+                                                                    options="temperature">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 control-label static-label">盘点区域</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control select2-single"
+                                                                    options="checkArea"
+                                                                    name="checkArea">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 control-label">盘点类型</label>
+                                                        <div class="col-md-8 controls">
+                                                            <label class="checkbox-inline" for="inline-checkbox1">
+                                                                <input type="checkbox" id="inline-checkbox1"
+                                                                       name="dayCheck"
+                                                                       value="option1"/> 日盘
+                                                            </label>
+                                                            <label class="checkbox-inline" for="inline-checkbox2">
+                                                                <input type="checkbox" id="inline-checkbox2"
+                                                                       name="weekCheck"
+                                                                       value="option2"/> 周盘
+                                                            </label>
+                                                            <label class="checkbox-inline" for="inline-checkbox3">
+                                                                <input type="checkbox" id="inline-checkbox3"
+                                                                       name="monthCheck"
+                                                                       value="option3"/> 月盘
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 control-label"
+                                                               for="textarea-input">简单描述</label>
+                                                        <div class="col-md-8">
+                                                        <textarea id="textarea-input" name="remark" rows="3"
+                                                                  class="form-control"
+                                                                  style="width: 100%; overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 99px;"
+                                                                  placeholder="简单的描述.."></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="text-center">
+                                                        <img src="<%= global.config.imagePath %>default.png"
+                                                             class="rounded materiel-image" alt=""/>
+                                                        <span type="button"
+                                                              class="btn btn-outline-info btn-sm btn-block fileinput-button"
+                                                              style="margin: 0.75rem;">图片选择
+                                                            <input id="fileupload" type="file" name="upfile"
+                                                                   multiple=""/>
+                                                        </span>
+                                                    </div>
+                                                    <input type="hidden" name="image" class="form-control"
+                                                           id="imageValue"
+                                                           placeholder=""/>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div id="error_message" class="text-center"></div>
+                                    </div>
+                                    <div class="tab-pane" id="home4" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="priceList"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="profile4" role="tabpanel">
+                                        建通过035接口直接获取展现
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary center btn-save">保存
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

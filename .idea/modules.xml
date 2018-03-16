@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/pcp.iml" filepath="$PROJECT_DIR$/pcp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-auth/pcp-auth.iml" filepath="$PROJECT_DIR$/pcp-auth/pcp-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-auth/pcp-auth-api/pcp-auth-api.iml" filepath="$PROJECT_DIR$/pcp-auth/pcp-auth-api/pcp-auth-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-auth/pcp-auth-server/pcp-auth-server.iml" filepath="$PROJECT_DIR$/pcp-auth/pcp-auth-server/pcp-auth-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-web/pcp-backoffice/pcp-backoffice.iml" filepath="$PROJECT_DIR$/pcp-web/pcp-backoffice/pcp-backoffice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-common/pcp-common.iml" filepath="$PROJECT_DIR$/pcp-common/pcp-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-crm/pcp-crm.iml" filepath="$PROJECT_DIR$/pcp-crm/pcp-crm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-crm/pcp-crm-api/pcp-crm-api.iml" filepath="$PROJECT_DIR$/pcp-crm/pcp-crm-api/pcp-crm-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-crm/pcp-crm-server/pcp-crm-server.iml" filepath="$PROJECT_DIR$/pcp-crm/pcp-crm-server/pcp-crm-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-common/pcp-data/pcp-data.iml" filepath="$PROJECT_DIR$/pcp-common/pcp-data/pcp-data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-common/pcp-domain/pcp-domain.iml" filepath="$PROJECT_DIR$/pcp-common/pcp-domain/pcp-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-facade/pcp-facade.iml" filepath="$PROJECT_DIR$/pcp-facade/pcp-facade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-log/pcp-log.iml" filepath="$PROJECT_DIR$/pcp-log/pcp-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-log/pcp-log-api/pcp-log-api.iml" filepath="$PROJECT_DIR$/pcp-log/pcp-log-api/pcp-log-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-log/pcp-log-server/pcp-log-server.iml" filepath="$PROJECT_DIR$/pcp-log/pcp-log-server/pcp-log-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-netflix/pcp-netflix.iml" filepath="$PROJECT_DIR$/pcp-netflix/pcp-netflix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-netflix/pcp-netflix-client/pcp-netflix-client.iml" filepath="$PROJECT_DIR$/pcp-netflix/pcp-netflix-client/pcp-netflix-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-netflix/pcp-netflix-server/pcp-netflix-server.iml" filepath="$PROJECT_DIR$/pcp-netflix/pcp-netflix-server/pcp-netflix-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-pos/pcp-pos.iml" filepath="$PROJECT_DIR$/pcp-pos/pcp-pos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-pos/pcp-pos-api/pcp-pos-api.iml" filepath="$PROJECT_DIR$/pcp-pos/pcp-pos-api/pcp-pos-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-pos/pcp-pos-server/pcp-pos-server.iml" filepath="$PROJECT_DIR$/pcp-pos/pcp-pos-server/pcp-pos-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-web/pcp-site/pcp-site.iml" filepath="$PROJECT_DIR$/pcp-web/pcp-site/pcp-site.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pcp-web/pcp-web.iml" filepath="$PROJECT_DIR$/pcp-web/pcp-web.iml" />
+    </modules>
+  </component>
+</project>

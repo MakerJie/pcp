@@ -1,0 +1,106 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "统计报表", txt2 = "库存明细报表";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">业务类型</span>
+                                                        <select class="form-control" name="type" id="queryType" options="fetchType">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店</span>
+                                                        <select class="form-control" id="storeSelect"
+                                                                name="shopCode"
+                                                                emptyOption="true"
+                                                                ajaxType="post"
+                                                                optionParam='{"properties":{"pageSize":1000,"code_in":"<%= userData.shops.join(',')%>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <% let now = new Date(); now.setDate(1); %>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">下单日期</span>
+                                                        <input class="form-control date-picker" id="happenTime_gt" value="<%= global.tool.dateFormatter(now,'yyyy-MM-dd') %>" data-date-format="yyyy-mm-dd" name="happenTime_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker" id="happenTime_le" value="<%= global.tool.dateFormatter(new Date(),'yyyy-MM-dd') %>" data-date-format="yyyy-mm-dd" name="happenTime_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <table class="grid">
+                                    <thead>
+                                    <tr style="font-weight: 700;">
+                                        <td style="width: 15%;text-align: center;">物料编码</td>
+                                        <td style="width: 22%;text-align: center;">物料名称</td>
+                                        <td style="width: 15%;text-align: center;">数量</td>
+                                        <td style="width: 15%;text-align: center;">单位</td>
+                                        <td style="width: 15%;text-align: center;">原因</td>
+                                        <td style="width: 18%;text-align: center;">备注</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

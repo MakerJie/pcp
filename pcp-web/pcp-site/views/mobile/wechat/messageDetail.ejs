@@ -1,0 +1,175 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "金玉良言";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/weui.min.css">
+    <link rel="stylesheet" href="<%= global.config.publicPath %>/assets/weui/css/jquery-weui.min.css">
+    <style>
+        .weui-picker-modal .picker-item {
+            padding: 0 30px;
+        }
+
+        .toolbar .title {
+            line-height: 1.45rem;
+        }
+
+        .logBtn {
+            color: #014288;
+            padding: 20px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <img src="<%= global.config.publicPath %>/page/images/icon/icon_bg_left.png" class="icon-register-left"/>
+        <img src="<%= global.config.publicPath %>/page/images/icon/icon_bg_right.png" class="icon-register-right"/>
+
+        <div class="container-fluid">
+            <form id="data_form" class="edit-form" method="post" action="">
+                <input type="hidden" name="id"/>
+                <div class="tab-pane active">
+                    <span style="padding-left: 1%;font-size: 20px;">服务单详情</span><br>
+                    <div class="row" style="padding-left: 5%;padding-top: 10px">
+                        <div class="form-group">
+                            <div class="controls">
+                                <div class="col-md-4">
+                                    <p>
+                                        <strong class="text-lg-center">会员卡号</strong>&nbsp;
+                                        <span name="cardNo"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">用户名</strong>&nbsp;
+                                        <span name="userName"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">手机号</strong>&nbsp;
+                                        <span name="mobile"></span>
+                                    </p>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <p>
+                                        <strong class="text-lg-center">提交时间</strong>&nbsp;
+                                        <span name="createTime"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">消费门店</strong>&nbsp;
+                                        <span name="shopName"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">邮箱</strong>&nbsp;
+                                        <span name="email"></span>
+                                    </p>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <p>
+                                        <strong class="text-lg-center">消费城市</strong>&nbsp;
+                                        <span name="city"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">意见类型</strong>&nbsp;
+                                        <span name="viewType"></span>
+                                    </p>
+
+                                    <p>
+                                        <strong class="text-lg-center">图片</strong>&nbsp;
+                                        <img id="fImage" class="img-responsive" style="width: 60px;" src=""/>
+                                    </p>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-left: 5%">
+                    <div class="col-md-11">
+                        <strong class="text-lg-center">详细描述</strong><br>
+                        <span name="viewRemark"></span>
+                    </div>
+                </div>
+                <hr>
+                <span style="padding-left: 1%;font-size: 20px;">回复处理</span><br>
+                <div class="row" style="padding-left: 5%;padding-top: 10px">
+                    <div class="col-md-6">
+                        <p>
+                            <strong class="text-lg-center">服务单号</strong>&nbsp;
+                            <span name="code"></span>
+                        </p>
+                        <p>
+                            <strong class="text-lg-center">回复人</strong>&nbsp;
+                            <span name="updator"></span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-left: 5%">
+                    <div class="col-md-11">
+                        <div class="form-group">
+                            <strong class="text-lg-center">回复内容</strong>
+                            <div class="controls">
+                                <div class="input-group ">
+                                        <textarea class="form-control " name="result"
+                                                  style="width: 830px;height: 80px; background-color: white;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="replyDiv" style="display: none">
+                    <hr>
+                    <span style="padding-left: 1%;font-size: 20px;">回复满意度</span><br>
+                    <div class="row" style="padding-left: 5%;padding-top: 10px">
+                        <div class="col-md-6">
+                            <p>
+                                <strong class="text-lg-center">回复满意度</strong>&nbsp;
+                                <span name="degree"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-left: 5%">
+                        <div class="col-md-11">
+                            <strong class="text-lg-center">回复满意度详细描述</strong><br>
+                            <textarea class="form-control " name="degreeRemark"
+                                      style="width: 830px;height: 80px; background-color: white;"
+                                      disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div id="error_message" style="color: red;text-align: center;"></div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div id="pageData"
+     data-appid="<%= data.appId %>"
+     data-timestamp="<%= data.timestamp %>"
+     data-noncestr="<%= data.nonceStr %>"
+     data-signature="<%= data.signature %>" ></div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/weui/js/jquery-weui.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/weui/js/city-picker.min.js"></script>
+</body>
+</html>
