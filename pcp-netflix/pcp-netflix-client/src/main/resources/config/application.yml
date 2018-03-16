@@ -1,0 +1,14 @@
+ribbon:
+  ConnectTimeout: 30000
+  ReadTimeout: 600000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:11001/eureka/
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+
+feign:
+  httpclient:
+    enabled: true

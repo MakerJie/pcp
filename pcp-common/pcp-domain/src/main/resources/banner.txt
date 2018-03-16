@@ -1,0 +1,12 @@
+######################################################
+# Hello, Welcome to Earth......
+# CRM
+#
+# author: Wang, junjie <3083129853@qq.com>
+# date: June 2017
+# Don't u remember the reason you love me?
+# I so miss u ...
+#######################################################
+#
+# ***************** Version: 1.0.0 ********************
+#

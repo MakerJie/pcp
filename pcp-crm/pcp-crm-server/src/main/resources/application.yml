@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: crm
+
+server:
+  port: 11009
+

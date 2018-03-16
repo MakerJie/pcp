@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: pos
+
+server:
+  port: 11002
+
+sap:
+  protocol: http://
+  host: 10.254.10.6
+  port: 8000
+  path: /sap/center/mw/
+  shop: 002
+  order: 023

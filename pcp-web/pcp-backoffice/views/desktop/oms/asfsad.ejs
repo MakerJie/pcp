@@ -1,0 +1,237 @@
+
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "消费订单", txt2 = "预提租金计算";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                            <li role="presentation" class="active">
+                                <a href="#home4" id="tab_user2" idx="2"
+                                   aria-controls="home4" role="tab"
+                                   data-toggle="tab"><i class="fa  fa-trello icon-menu" aria-hidden="true"></i>预提租金计算<span
+                                            class="badge" id="unSubmitNum"></span></a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#word4" id="tab_user4" idx="1"
+                                   aria-controls="word4" role="tab"
+                                   data-toggle="tab"><i class="fa fa-trello icon-menu"></i>待过账列表</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#hello4" id="tab_user5" idx="1"
+                                   aria-controls="hello4" role="tab"
+                                   data-toggle="tab"><i class="fa fa-trello icon-menu"></i>全部合同列表</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="userList">
+                            <div class="tab-pane active" id="home4" role="tabpanel">
+                                <hr class="divider-hr"/>
+                                <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                                    <form id="order-form">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>门店名称</strong></label>
+                                                <div>
+                                                    <select class="form-control" id="shopName2"
+                                                            emptyOption="true"
+                                                            name="shopCode"
+                                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                            ajaxType="post"
+                                                            value="<%= userData.shopCode %>"
+                                                            optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class=" form-control-label static-label"
+                                                       for="deliveryDate"><strong>预提租金计算日期</strong></label>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="rentStart_gt">
+                                                        <span class="input-group-addon">至</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="rentStart_le">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-md-3" style="display: block;margin-top: 10px">
+                                            <button type="button" class="btn btn-primary btn-select">查询</button>
+                                            <button type="button" class="btn btn-primary btn-save">保存</button>
+
+                                        </div>
+                                    </div>
+
+                                    <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="orderList"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="word4" role="tabpanel">
+                                <hr class="divider-hr"/>
+                                <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                                    <div class="row" id="dataToSap">
+                                        <button type="button" class="btn btn-outline blue btn_passCash" style="margin-right: 20px;float: right"><i class="fa fa-cloud-upload"></i> 过账至SAP</button>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="dataList"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="hello4" role="tabpanel">
+                                <hr class="divider-hr"/>
+                                <div class="row" id="typeList" style="padding: 0.5rem 2rem;">
+                                    <form id="order-form">
+                                        <div class="row">
+
+                                            <div class="col-md-3">
+                                                <label class="form-control-label static-label"><strong>门店名称</strong></label>
+                                                <div>
+                                                    <select class="form-control" id="shopName1"
+                                                            emptyOption="true"
+                                                            name="shopCode"
+                                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                            ajaxType="post"
+                                                            value="<%= userData.shopCode %>"
+                                                            optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class=" form-control-label static-label"
+                                                       for="deliveryDate"><strong>预提租金计算日期</strong></label>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="businessDate_gt">
+                                                        <span class="input-group-addon">至</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="businessDate_le">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3" style="display: block;margin-top: 10px">
+                                                <button type="button" class="btn btn-primary btn-select">查询</button>
+                                                <button type="button" class="btn btn-primary btn-save">保存</button>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr style="margin-top: 10px;margin-bottom: 10px;"/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="allList"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">过账编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form name="data_form2" class="edit-form" id="data_form2" method="post" action="">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label static-label"><strong>过账日期</strong></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                           name="passCheckDate">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_cashConfirm"><i class="fa fa-dot-circle-o"></i> 确认过账
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade" id="cashMatModal" tabindex="-1" role="dialog" aria-labelledby=matModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1000px;top: 0;right: 15px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">待过账数据</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="cashDataList" class="fix-height-list"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary cashSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: pcpLog
+server:
+  port: 11008

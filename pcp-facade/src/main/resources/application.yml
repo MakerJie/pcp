@@ -1,0 +1,30 @@
+server:
+  port: 11007
+  servletPath: /services
+
+spring:
+  application:
+    name: facade
+  thymeleaf:
+    cache: false
+
+logging:
+  file: log/facade/facade.log
+
+sap:
+  protocol: http://
+  host: mpuat.pizzaexpress.cn
+  port: 80
+  path: /sap/center/mw/
+  rule:
+    supplier: code=PARTNER;name=NAME1;type=RLTYP;telephone=TEL_NUMBER;email=SMTP_ADDR;remark=SORTL;buGroup=BU_GROUP;address=ZADRNR
+    shop: code=ZSTORE;name=LGOBE;remark=ADDRESS_ZH;country=COUNTRY;city=WW004_TXT;provinceCode=WW004;region=BZIRK;area=BZTXT;type=ZLGORT_TP;floor=WW005;bizDis=WW006;startDate=ZSDATE;endDate=ZCDATE;lastModify=UPDDT;telephone=TELF1;factory=WERKS;areaCode=BZIRK;stockRoom=LGORT;centerFactory=ZWERKS_D;centerStockRoom=ZLGORT_D;costCenter=KOSTL;processRoom=ZLGORT_P;email=SMTP_ADDR;dn=ZSHOP_CODE;brand=SPART;
+    materiel: code=MATNR;name=MAKTX;unit=MEINS;remark=SMALLTYPE_DESC;type=MTART;category1=MATKL;category2=ZZSMALLTYPE;dayCheck=ZZDAY;weekCheck=ZZWEEK;monthCheck=ZZMONTH;yearCheck=ZZYEAR;formula=ZZBOMCTRL;manufacturer=ZZHERST;checkArea=ZZINVTYAREA;temperature=ZZTEMP;shelfLife=MHDHB;shelfUnit=IPRKZ;spu=ZZSPU;enName=MAKTX_EN;typeRemark=WGBEZ;recommendPrice=VERPR;price=VERPR;brand=SPART;
+    product: code=MATNR;name=MAKTX;price=ZZPOS_PRICE;dn=ZZPOS_MAT;type=MTART;category1=MATKL;category2=ZZSMALLTYPE;enName=MAKTX_EN;temperature=ZZTEMP;brand=SPART;
+    shopPrice: supplierCode=LIFNR;unit=KMEIN;price=KBETR;priceCount=KPEIN
+    stock: stockyear=LFGJA;stockmonth=LFMON;materielCode=MATNR;materielName=MAKTX;stockCode=LGORT;stockName=LGOBE;stockAccount=MENGE;unit=MEINS;factory=WERKS;factoryName=NAME1;lotNumber=CHARG;temperature=ZZTEMP;norm=GROES;receiveDate=LWEDT;produceDate=HSDAT;dueDate=VFDAT;
+    stockDifferent: code=MATNR;name=MAKTX;stockUnit=MEINS;openStock=LABST1;endStock=LABST2;purchaseQuantity=MENGE;returnGoods=ZRETURN_QTY;loss=MENGE1;use=MENGE2;allot=ZTRANSFER_QTY;theoryUseQuantity=THEORETICAL_USE_QTY;factUseQuantity=ACTUAL_USE_QTY;theoryUseMoney=THEORETICAL_USE_AMOUNT;factUseMoney=ACTUAL_USE_AMOUNT;percent=PERCENTAGE_DIFF;unitCost=DWCB;quantityDiff=DIFF1;moneyDiff=DIFF2;factory=WERKS;stockLocation=LGORT;amount=ZSALES_AMOUNT;price=ZSALE_PRICE;quantity=MENGE;unit=MEINS;dn=EBELN;spu=ZZSPU;diffType=BTEXT;amount=DMBTR;price=ZPO_PRICE;remark=KOSTL_TXT;dn=MBLNR;happenDate=BUDAT;cate=SMALLTYPE_DESC;group=WGBEZ;product=ZZMATNR+MAKTX1;productQuantity=ZZQTY;productUnit=ZZMEINS;
+#    purchaseOrder: supplierCode=LIFNR;unit=KMEIN;price=KBETR;priceCount=KPEIN
+#    purchaseReceive: supplierCode=LIFNR;unit=KMEIN;price=KBETR;priceCount=KPEIN
+order:
+  upload: false
