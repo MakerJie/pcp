@@ -1,0 +1,957 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "会员列表";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.css"
+          rel="stylesheet">
+    <style>
+        .td-user-img {
+            /*min-width: 75px;*/
+        }
+
+        .td-user-img img {
+            width: 30px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 40px;
+
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e4e7ea;
+            height: 40px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 8px;
+        }
+    </style>
+
+
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" status="1"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">首次消费</span>
+                                                        <select class="js-example-disabled-results form-control"
+                                                                style="width: 100%;height: 50px;" id="firstShop"
+                                                                emptyOption="true"
+                                                                name="firstShop"
+                                                                ajaxType="post"
+                                                                value="<%= userData.shopCode %>"
+                                                                codeField="dn"
+                                                                optionParam='{"properties":{"pageSize":1000,"type":"1"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">联系手机</span>
+                                                        <input type="text" name="mobile_like" placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">会员等级</span>
+                                                        <select class="form-control" name="cardLevel"
+                                                                options="userLevel"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">生日</span>
+                                                        <span class="input-group-addon">月</span>
+                                                        <select class="form-control" name="_birMonStr" id="userMonth"
+                                                                options="accountMonth"></select>
+                                                        <span class="input-group-addon">日</span>
+                                                        <select class="form-control" name="_birDayStr" id='userDay'
+                                                                options="accountDay">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">会员卡号</span>
+                                                        <input type="text" name="cardNo_like" placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">注册渠道</span>
+                                                        <select class="form-control" name="crmChannel"
+                                                                options="crmChannel" id="crmChannel"></select>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">省</span>
+                                                        <select class="form-control" name="province"
+                                                                options="chinaRegion" id="selectProvince"></select>
+                                                        <span class="input-group-addon">市</span>
+                                                        <select class="form-control" name="city" style="width: 120px"
+                                                                id="selectCity"></select>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">会员星座</span>
+                                                        <select class="form-control" name="constellation"
+                                                                options="constellation"></select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query">
+                                                            <i class="fa fa-search"></i> 查询
+                                                        </button>
+                                                        <button type="button" class="btn btn-inverse btn_add">
+                                                            <i class="fa fa-plus-circle"></i> 新增
+                                                        </button>
+                                                        <div class="btn-group m-r-10">
+                                                            <button aria-expanded="false" data-toggle="dropdown"
+                                                                    class="btn btn-success dropdown-toggle waves-effect waves-light"
+                                                                    type="button">
+                                                                <i class="fa fa-heart"></i> 更多操作 <span
+                                                                        class="caret"></span>
+                                                            </button>
+                                                            <ul role="menu" class="dropdown-menu animated lightSpeedIn">
+                                                                <li><a href="javascript:void(0)"
+                                                                       data-le="3" id="btn_employee"><i
+                                                                                class="fa fa-address-book-o"></i> 员工卡更新
+                                                                    </a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="javascript:void(0)" id="btn_export"><i
+                                                                                class="fa fa-download"></i> 导出</a></li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <a href="javascript:void(0);" id="btn_more" class="pull-right"
+                                                           style="padding: 10px 10px 0 10px;color: #337ab7;">更多条件</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">文件导入</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form action="<%= global.config.contextPath == '/' ? '' : global.config.contextPath %>/file/csv"
+                              class="dropzone" id="myAwesomeDropzone">
+                            <div class="fallback">
+                                <input name="upfile" type="file"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-8">
+                        <div id="employeeList"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn_save_employeeFile"><i
+                            class="fa fa-dot-circle-o"></i> 更新
+                </button>
+                <a href="<%= global.config.publicPath %>/page/employee.csv" class="pull-left"
+                   style="line-height: 32px;margin-left: 10px;">导入模板下载</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="moreConditionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="msgTitle">更多条件查询</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="more_condition_form" class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">用户名</span>
+                                <input type="text" name="name_like" placeholder="模糊查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">性别</span>
+                                <select class="form-control" name="sex" options="sex"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px;">
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否爱品酒</span>
+                                <select class="form-control" name="tasting" options="decide"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">育有萌宝</span>
+                                <select class="form-control" name="hasBaby" options="decide"></select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">萌宝生日</span>
+                                <span class="input-group-addon">月</span>
+                                <select class="form-control" name="_babyMonth" id="babyMonth"
+                                        options="accountMonth"></select>
+                                <span class="input-group-addon">日</span>
+                                <select class="form-control" name="babyDay" id='babyDay' options="accountDay">
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">萌宝性别</span>
+                                <select class="form-control" name="babySex_like" options="sex"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">积分余额</span>
+                                <input type="number" name="totalPoint_gt" class="form-control"
+                                       value=""/>
+                                <span class="input-group-addon">至</span>
+                                <input type="number" name="totalPoint_le" class="form-control"
+                                       value=""/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">我想参加</span>
+                                <select class="form-control" name="wantArea" data-placeholder="请选择...">
+                                    <option value="">--请选择--</option>
+                                    <option value="新品试吃">新品试吃</option>
+                                    <option value="儿童披萨制作派对">儿童披萨制作派对</option>
+                                    <option value="交友派对">交友派对</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">会员状态</span>
+                                <select class="form-control" name="status">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">激活</option>
+                                    <option value="0">冻结</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <div class="input-group">
+                                <span class="input-group-addon">注册时间</span>
+                                <input class="form-control date-picker"
+                                       data-date-format="yyyy-mm-dd" name="createTime_gt"/>
+                                <span class="input-group-addon">至</span>
+                                <input class="form-control date-picker"
+                                       data-date-format="yyyy-mm-dd" name="createTime_le"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>标签</p>
+                    <select class="select2 m-b-10 select2-multiple tagSelect" style="width: 100%;" multiple="multiple"
+                            name="userTag_like" data-placeholder="请选择...">
+                        <option value="素食主义">素食主义</option>
+                        <option value="无肉不欢">无肉不欢</option>
+                        <option value="修身达人">修身达人</option>
+                        <option value="修图狂人">修图狂人</option>
+                        <option value="选择困难症">选择困难症</option>
+                        <option value="甜品控">甜品控</option>
+                        <option value="溜娃负责人">溜娃负责人</option>
+                        <option value="无辣不欢">无辣不欢</option>
+                        <option value="仪式感">仪式感</option>
+                        <option value="懒癌晚期">懒癌晚期</option>
+                        <option value="爱电商">爱电商</option>
+                    </select>
+
+                    <p>菜品偏好</p>
+                    <select class="select2 m-b-10 select2-multiple foodFaver" style="width: 100%;" multiple="multiple"
+                            name="preference_like" data-placeholder="请选择...">
+                        <option value="披萨">披萨</option>
+                        <option value="意面">意面</option>
+                        <option value="沙拉">沙拉</option>
+                        <option value="海鲜">海鲜</option>
+                        <option value="牛排">牛排</option>
+                    </select>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="userDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">会员新增</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="purchaseDetail">
+                    <div class="col-md-12">
+                        <form id="userForm">
+                            <input type="hidden" name="id"/>
+                            <input type="hidden" name="crmChannel" value="backend"/>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">用户名</label><span style="color:red">*</span>
+                                    <div class="controls">
+                                        <div class="input-group ">
+                                            <span class="input-group-addon"><i class="fa fa-user-circle"
+                                                                               aria-hidden="true"></i></span>
+                                            <input type="text" class="form-control " name="name" id="userName"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">手机号</label><span style="color:red">*</span>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa  fa-phone"
+                                                                               aria-hidden="true"></i></span>
+                                            <input type="text" class="form-control" name="mobile" id="userMobile"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">会员等级</label><span style="color:red">*</span>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa  fa-trophy"
+                                                                               aria-hidden="true"></i></span>
+                                            <select class="form-control" name="cardLevel" options="uLevel"
+                                                    id="uLevel"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">生日</label><span style="color:red" class="star">*</span>
+                                    <div class="controls">
+                                        <div class="input-group date">
+                                            <span class="input-group-addon"><i class="fa fa-birthday-cake"
+                                                                               aria-hidden="true"></i></span>
+                                            <input type="text" class="form-control date-picker" id="date01"
+                                                   name="birthday" data-date-format="yyyy-mm-dd"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">性别</label><span style="color:red" class="star">*</span>
+                                    <div class="controls">
+                                        <div class="input-group ">
+                                            <span class="input-group-addon"><i class="fa fa-female"
+                                                                               aria-hidden="true"></i></span>
+                                            <select class="form-control" name="sex" options="sex"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">我想参加</label>
+                                    <div class="controls">
+                                        <select class="form-control" name="wantArea" data-placeholder="请选择...">
+                                            <option value="">--请选择--</option>
+                                            <option value="新品试吃">新品试吃</option>
+                                            <option value="儿童披萨制作派对">儿童披萨制作派对</option>
+                                            <option value="交友派对">交友派对</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">所在城市</label><span style="color:red"
+                                                                                   class="star">*</span>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <div class="input-group outer">
+                                                <span class="input-group-addon">省</span>
+                                                <select class="form-control" name="province"
+                                                        options="chinaRegion" id="addProvince"></select>
+                                                <span class="input-group-addon">市</span>
+                                                <select class="form-control" name="city" style="min-width:200px;"
+                                                        id="addCity"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">是否爱品酒</label>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-smile-o"
+                                                                               aria-hidden="true"></i></span>
+                                            <select class="form-control" name="tasting" options="decide"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">是否育有萌宝</label><span style="color:red"
+                                                                                     class="star">*</span>
+                                    <div class="controls">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-child"
+                                                                               aria-hidden="true"></i></span>
+                                            <select class="form-control" name="hasBaby" id="decide"
+                                                    options="decide"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="baby" hidden>
+                                <div class="col-md-6" id="mengBao">
+                                    <div class="form-group">
+                                        <label class="control-label">萌宝1性别</label>
+                                        <div class="controls">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-female"
+                                                                                   aria-hidden="true"></i></span>
+                                                <select class="form-control" name="babySex1" options="sex"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">萌宝1生日</label>
+                                        <div class="controls">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-birthday-cake"
+                                                                                   aria-hidden="true"></i></span>
+                                                <input type="text" class="form-control date-picker " id="date01"
+                                                       name="babyBir1"
+                                                       data-date-format="yyyy-mm-dd"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" id="mengBao">
+                                    <div class="form-group">
+                                        <label class="control-label">萌宝2性别</label>
+                                        <div class="controls">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-female"
+                                                                                   aria-hidden="true"></i></span>
+                                                <select class="form-control" name="babySex2" options="sex"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">萌宝2生日</label>
+                                        <div class="controls">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-birthday-cake"
+                                                                                   aria-hidden="true"></i></span>
+                                                <input type="text" class="form-control date-picker" id="date01"
+                                                       name="babyBir2"
+                                                       data-date-format="yyyy-mm-dd"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">标签</label>
+                                    <div class="controls">
+                                        <select class="select2 m-b-10 select2-multiple tagSelect" name="userTag"
+                                                style="width: 100%;"
+                                                multiple="multiple" data-placeholder="请选择...">
+                                            <option value="素食主义">素食主义</option>
+                                            <option value="无肉不欢">无肉不欢</option>
+                                            <option value="修身达人">修身达人</option>
+                                            <option value="修图狂人">修图狂人</option>
+                                            <option value="选择困难症">选择困难症</option>
+                                            <option value="甜品控">甜品控</option>
+                                            <option value="溜娃负责人">溜娃负责人</option>
+                                            <option value="无辣不欢">无辣不欢</option>
+                                            <option value="仪式感">仪式感</option>
+                                            <option value="懒癌晚期">懒癌晚期</option>
+                                            <option value="爱电商">爱电商</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">菜品偏好</label>
+                                    <div class="controls">
+                                        <select class="select2 m-b-10 select2-multiple foodFaver" name="preference"
+                                                style="width: 100%;"
+                                                multiple="multiple" data-placeholder="请选择...">
+                                            <option value="披萨">披萨</option>
+                                            <option value="意面">意面</option>
+                                            <option value="沙拉">沙拉</option>
+                                            <option value="海鲜">海鲜</option>
+                                            <option value="牛排">牛排</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="error_message" class="text-center pull-left text-danger"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-save" id="saveBtn"><i class="fa  fa-dot-circle-o"></i>
+                    保存
+                </button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1060px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span id="userTitle"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="detailContent">
+                <div style="width: 100%;padding: 0 15px;">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <form class="edit-form">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">手机号</strong>&nbsp;
+                                            <span name="mobile"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">注册时间</strong>&nbsp;
+                                            <span name="createTime"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">生日</strong>&nbsp;
+                                            <span name="birthday"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">星座</strong>&nbsp;
+                                            <span name="constellation"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">首次消费</strong>&nbsp;
+                                            <span name="firstDealTime"></span> <span name="firstShopName"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">最后消费</strong>&nbsp;
+                                            <span name="lastDealTime"></span> <span name="lastShopName"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">是否品酒</strong>&nbsp;
+                                            <span name="tasting"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">注册渠道</strong>&nbsp;
+                                            <span name="crmChannel"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">想参加</strong>&nbsp;
+                                            <span name="wantArea"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">创建人</strong>&nbsp;
+                                            <span name="creator"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">菜品偏好</strong>&nbsp;
+                                            <span name="preference"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">所在城市</strong>&nbsp;
+                                            <span name="address"></span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">标签</strong>&nbsp;
+                                            <span name="userTag"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong class="text-lg-center">已育萌宝</strong>&nbsp;
+                                            <span name="hasBaby"></span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">萌宝信息</strong>&nbsp;
+                                            <span name="babyBir1"></span>
+                                            <span> </span>
+                                            <span name="babySex1"></span>
+                                            <span>;</span>
+                                            <span name="babyBir2"></span>
+                                            <span> </span>
+                                            <span name="babySex2"></span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">我的最爱</strong>&nbsp;
+                                            <span id="myFavor">暂无订单信息</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <img style="width: 80px;" src="/assets/plugins/images/users/john.jpg" alt=""
+                                             class="img-circle"/>
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">会员等级</strong>&nbsp;
+                                            <span name="levelName"> - </span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">积分余额</strong>&nbsp;
+                                            <span name="totalPoint"> - </span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">保级积分</strong>&nbsp;
+                                            <span name="keepPoint"> - </span>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong class="text-lg-center">消费积分</strong>&nbsp;
+                                            <span name="salePoint"> - </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row" style="border-top: 1px solid lightgray;">
+                        <ul class="nav customtab nav-tabs" role="tablist">
+                            <li class="nav-item active">
+                                <a id="tab2" class="nav-link" data-toggle="tab" href="#profile3" role="tab"
+                                   aria-controls="profile">积分流水</a>
+                            </li>
+                         <!--   <li class="nav-item">
+                                <a id="tab3" class="nav-link" data-toggle="tab" href="#messages3" role="tab"
+                                   aria-controls="messages">消费历史 <span class="badge" id="orderCount"></span></a>
+                            </li>-->
+                            <li class="nav-item">
+                                <a id="tab5" class="nav-link" data-toggle="tab" href="#coupons3" role="tab"
+                                   aria-controls="coupons">优惠券 <span class="badge bg-info" id="giftCount"></span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="tab6" class="nav-link" data-toggle="tab" href="#levelChange3" role="tab"
+                                   aria-controls="levelChange">等级变动</a>
+                            </li>
+                        </ul>
+                        <!--分页栏-->
+                        <div class="tab-content">
+                            <!--积分流水-->
+                            <div class="tab-pane active" id="profile3" role="tabpanel">
+                                <div id="pointList"></div>
+                            </div>
+                            <!--消费历史-->
+                            <div class="tab-pane" id="messages3" role="tabpanel">
+                                <div id="orderList"></div>
+                            </div>
+                            <!--end-->
+                            <!--优惠券-->
+                            <div class="tab-pane" id="coupons3" role="tabpanel">
+                                <div id="saverTicketList"></div>
+                            </div>
+                            <!--end-->
+                            <!--等级变动-->
+                            <div class="tab-pane" id="levelChange3" role="tabpanel">
+                                <div id="levelChangeList"></div>
+                            </div>
+                            <!--end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button id="repeal" type="button" class="btn btn-danger btn-repeal" data-status="0"><i
+                            class='fa fa-ban'></i> 冻结
+                </button>
+                <button id="activate" type="button" class="btn btn-primary btn-repeal" data-status="1"><i
+                            class='fa fa-window-restore'></i> 激活
+                </button>
+                <button id="orderShow" type="button" class="btn btn-info"><i class='fa fa-beer'></i> 积分补偿</button>
+                <button type="button" class="btn btn-inverse btn-levelUpdate"><i class='fa fa-vcard'></i> 等级更新</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:820px;top:0;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">消费订单</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="order_query_form" action="" method="post" role="form"
+                      class="query-condition">
+                    <input type="hidden" name="userCode" id="order_userCode"/>
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">订&nbsp;&nbsp;单&nbsp;&nbsp;号</span>
+                                <input type="text" name="code_like" placeholder="订单号模糊查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">小票单号</span>
+                                <input type="text" name="billNo" placeholder="精确查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">消费门店</span>
+                                <input type="text" name="name_like" placeholder="模糊查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">消费时间</span>
+                                <input class="form-control date-picker"
+                                       data-date-format="yyyy-mm-dd" name="happenTime_gt"/>
+                                <span class="input-group-addon">至</span>
+                                <input class="form-control date-picker"
+                                       data-date-format="yyyy-mm-dd" name="happenTime_le"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary btn_order_query"><i
+                                        class="fa fa-search"></i> 查询
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="orderListSelect"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_user_order" data-user><i
+                            class="fa fa-dot-circle-o"></i> 确定
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="updateLevel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">等级更新</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateLevelform" class="edit-form" method="post" action="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">更新后的等级</label>
+                                <select class="form-control" name="cardLevel"
+                                        options="userLevel" id="levelUpdate"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">变动原因</label>
+                                <textarea name="levelReason" rows="3" style="width: 100%;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary updateLevelSave"><i class="fa fa-dot-circle-o"></i>确认
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/zh-CN.js"></script>
+</body>
+</html>
