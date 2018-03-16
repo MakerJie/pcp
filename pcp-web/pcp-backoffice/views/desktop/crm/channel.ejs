@@ -1,0 +1,131 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/bootstrap/css/multiple-select.css" rel="stylesheet">
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include crmMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb list">
+                    <li><a href="<%= ctx %>/crm/index">会员与营促销</a></li>
+                    <li><a href="#">渠道管理</a></li>
+                </ol>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h2>查询条件</h2>
+                        </div>
+                        <div class="box-content">
+                            <form id="query_form" action="" method="post" role="form">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">渠道名称</span>
+                                            <input type="text" name="name_like" placeholder="模糊查询" class="form-control" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">渠道英文</span>
+                                            <input type="text" name="enName_like" placeholder="模糊查询" class="form-control" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-primary btn_query">查询</button>
+                                    <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i>新增
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="dataList"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="dataListSelect"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">渠道列表</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="data_form" class="edit-form" method="post" action="">
+                    <input type="hidden" name="id"/>
+                    <div class="tab-pane active">
+                        <div class="row" style="padding-left: 5%">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">渠道名称</label>
+                                            <div class="controls">
+                                                <div class="input-group ">
+                                                    <input type="text" class="form-control" style="width: 200px" name="name"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">渠道英文</label>
+                                            <div class="controls">
+                                                <div class="input-group ">
+                                                    <input type="text" class="form-control" style="width: 200px" name="enName"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="checkDiv" class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/bootstrap/multiple-select.js"></script>
+</body>
+</html>
