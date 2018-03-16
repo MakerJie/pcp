@@ -1,0 +1,182 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "会员与营促销", txt2 = "优惠券下发明细";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form id="query_form" action="" method="post" role="form" style="margin: 3px;"
+                                              class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">会员卡号</span>
+                                                        <input type="text" name="user_cardNo$mobile_or_obj_ae_attr"
+                                                               placeholder="卡号与手机号模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">优惠券</span>
+                                                        <input type="text" name="name$code_or_attr"
+                                                               placeholder="券号或者名称模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">获取方式</span>
+                                                        <select class="form-control" name="fetchMethod"
+                                                                options="couponMethod"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">下发编码</span>
+                                                        <input type="text" name="couponSent_code_obj_like_ae"
+                                                               placeholder="模糊查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">券状态</span>
+                                                        <select class="form-control"
+                                                                name="status" options="couponStatus"></select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <button type="button" class="btn btn-primary btn_query"><i
+                                                                class="fa fa-search"></i> 查询
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="couponDataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">券详情
+                    <small id="couponCode"></small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-form" id="couponInfoForm">
+                    <h2 class="m-b-0 m-t-0" id="c_name" style="width: 100%;text-align: right;"></h2>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6">
+                            <div class="white-box text-center"><img src="" id="couponImage" class="img-responsive"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-6">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td>下发时间</td>
+                                        <td id="c_fetchDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>下发方式</td>
+                                        <td id="c_fetchMethod"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>当前状态</td>
+                                        <td id="c_statusName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>有效日期</td>
+                                        <td id="c_activeDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>失效日期</td>
+                                        <td id="c_expireDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>会员名称</td>
+                                        <td id="c_userName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>会员手机</td>
+                                        <td id="c_mobile"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>核销时间</td>
+                                        <td id="c_verifyDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>核销订单</td>
+                                        <td><span id="c_shop"></span>,<span id="c_orderCode"></span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>
