@@ -1,0 +1,135 @@
+<title><%= title %></title>
+<!-- Bootstrap Core CSS -->
+<link href="<%= global.config.publicPath %>/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- This is Sidebar menu CSS -->
+<link href="<%= global.config.publicPath %>/assets/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">
+<!-- This is a Animation CSS -->
+<link href="<%= global.config.publicPath %>/assets/css/animate.css" rel="stylesheet">
+<!-- This is a Custom CSS -->
+<link href="<%= global.config.publicPath %>/assets/css/style.css" rel="stylesheet">
+<!-- color CSS you can use different color css from css/colors folder -->
+<!-- We have chosen the skin-blue (default.css) for this starter
+     page. However, you can choose any other skin from folder css / colors .
+     -->
+<link href="<%= global.config.publicPath %>/assets/css/colors/blue-dark.css" id="theme" rel="stylesheet">
+
+<link href="<%= global.config.publicPath %>/dolphin/css/dolphin.<%= global.config.mode %>css" rel="stylesheet">
+<link href="<%= global.config.publicPath %>/assets/css/customer.css" rel="stylesheet">
+<link href="<%= global.config.publicPath %>/assets/css/customer_site.css" rel="stylesheet">
+
+
+<style>
+    #page-wrapper{
+        background-image: url(<%= global.config.publicPath %>/page/images/icon/bg.png);
+        background-size: 100% 100%;
+    }
+    .card-block{
+        background: url(<%= global.config.publicPath %>/page/images/icon/icon_center_bg.png) #ffffff;
+        background-size: 100% 100%;
+        height: 180px;
+        text-align: center;
+        color: #014288;
+        font-weight: 700;
+        font-size: 20px;
+        padding: 0 10px;
+    }
+    .block1{
+        background: url(<%= global.config.publicPath %>/page/images/icon/block1_bg_border.png) #ffffff;
+        background-size: 100% 100%;
+        height: 80px;
+        width: 80px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 20px;
+        vertical-align: middle;
+        padding: 12px;
+    }
+    .block2{
+        background: url(<%= global.config.publicPath %>/page/images/icon/block2_bg_border.png) #ffffff;
+        background-size: 100% 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #014288;
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    .block4{
+        background: url(<%= global.config.publicPath %>/page/images/icon/block4_bg_border.png) #ffffff;
+        background-size: 100% 100%;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        color: #014288;
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    .block2.active span{
+        color: #c5a474;
+        /*background-image: -webkit-gradient(linear, 0 right, 0 0, from(#c5a474), to(#e7bf88));*/
+        /*-webkit-background-clip: text;*/
+        /*-webkit-text-fill-color: transparent;*/
+    }
+    .block3{
+        background: url(<%= global.config.publicPath %>/page/images/icon/block3_bg.png) #ffffff;
+        background-size: 100% 100%;
+        margin-top: 20px;
+        height: 160px;
+        margin-left: 10px;
+        padding: 30px;
+    }
+    .block5{
+        background: url(<%= global.config.publicPath %>/page/images/icon/block5_bg.png) #ffffff;
+        background-size: 100% 100%;
+        margin-top: 20px;
+        height: 160px;
+        padding: 30px;
+    }
+    .pizza-form-group button.verify{
+        background: url(<%= global.config.publicPath %>/page/images/icon/bar.png) #ffffff;
+        background-size: 100% 100%;
+    }
+
+    .btn.btn-pizza{
+        background: url(<%= global.config.publicPath %>/page/images/icon/button.png) #ffffff;
+        background-size: 100% 100%;
+        padding: 12px 30px;
+        color: #fff;
+    }
+    .rights{
+        padding: 30px 15px;
+        width: 100%;
+        height: 100%;
+    }
+    .rights img {
+        width: 60%;
+    }
+    .rights span {
+        position: absolute;
+        left: 32%;
+        top: 15px;
+        color: #fff;
+    }
+    .rights .top_img{
+        background: url(<%= global.config.publicPath %>/page/images/icon/box_border_top.png) #ffffff;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        height: 50px;
+        text-align: center;
+        position: relative;
+    }
+    .rights .center_img{
+        background: url(<%= global.config.publicPath %>/page/images/icon/box_bg.png);
+        background-repeat: repeat-y;
+        background-size: 100%;
+        padding: 15px;
+    }
+    .rights .bottom_img{
+        background: url(<%= global.config.publicPath %>/page/images/icon/box_border_bottom.png) #ffffff;
+        background-size: 100%;
+        height: 55px;
+        background-repeat: no-repeat;
+    }
+</style>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>新闻明细</title>
+</head>
+<body>
+<div id="content">
+
+</div>
+<% include ../common/footer.ejs %>
+<script>
+    $(function () {
+        var pkId = org.breezee.context.queryData.id;
+        if(pkId){
+            Dolphin.ajax({
+                url: "/api/44f68abae4874b2e92846b9bf5cce3e2@id=" + pkId,
+                type: Dolphin.requestMethod.GET,
+                onSuccess: function (reData) {
+                    $("#content").append(reData.value['uedit']);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

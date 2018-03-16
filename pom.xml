@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2016 Breezee.org. All Rights Reserved.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+    </parent>
+
+    <groupId>com.pcp</groupId>
+    <artifactId>pcp</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+
+    <modules>
+        <module>pcp-pos</module>
+        <module>pcp-crm</module>
+        <module>pcp-web</module>
+        <module>pcp-common</module>
+        <module>pcp-netflix</module>
+        <module>pcp-auth</module>
+        <module>pcp-facade</module>
+        <module>pcp-log</module>
+    </modules>
+
+    <properties>
+        <pcp.version>1.0.0</pcp.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java_source_version>1.8</java_source_version>
+        <java_target_version>1.8</java_target_version>
+        <java.version>1.8</java.version>
+        <file_encoding>UTF-8</file_encoding>
+        <dists>/tmp/dists</dists>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-domain</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-data</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-pos-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-crm-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-auth-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-pms-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-sap</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-log-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-netflix-client</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.pcp</groupId>
+                <artifactId>pcp-rpt-api</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Dalston.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

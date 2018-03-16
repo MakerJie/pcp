@@ -1,0 +1,61 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        ,pageName="消费记录";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .shop-name{
+            color: #c5a474;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .block5{
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid" id="orderDetailData">
+        <!--    <div class="coupon-block block5">
+                <p>
+                    <span class="shop-name">来福士广场店</span>
+                    <span class="pull-right">2017-10-10 10:00:00</span>
+                </p>
+                <dl class="dl-horizontal"><dt>实付金额：</dt>
+                    <dd>600元</dd><dt>积分奖励：</dt><dd>
+                        <div>消费积分 600</div>
+                        <div>权益积分 600</div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="coupon-block block5">
+                <p>
+                    <span class="shop-name">来福士广场店</span>
+                    <span class="pull-right">2017-10-10 10:00:00</span>
+                </p>
+                <dl class="dl-horizontal">
+                    <dt>实付金额：</dt>
+                    <dd>600元</dd>
+                    <dt>积分奖励：</dt>
+                    <dd><div>消费积分 600</div><div>权益积分 600</div></dd>
+                </dl>
+
+            </div>-->
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

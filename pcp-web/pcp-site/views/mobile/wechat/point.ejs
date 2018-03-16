@@ -1,0 +1,87 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "积分商城";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <style>
+        .level-info {
+            font-size: 11px;
+            position: absolute;
+            top: 259px;
+            color: #c5a474;
+            right: 25px;
+            transform: rotate(-2deg);
+        }
+        .pizza-form-group.point-detail{
+            padding: 10px 0 5px 0;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid" style="font-size: 15px;">
+            <div class="coupon-tab hor-tab">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="block1 page-link" data-link="<%= ctx %>/wechat/mall?type=1">
+                            积分<br/>商城
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block1 page-link" data-link="<%= ctx %>/wechat/mall?type=2">
+                            生活<br/>服务
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="block1 page-link mall-active" data-link="<%= ctx %>/wechat/point">
+                            积分<br/>明细
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%
+            const Level = ["","蓝卡","金卡","铂金卡","黑卡","员工卡"];
+            %>
+
+            <div class="common-box register-box">
+                <div style="padding: 0 0 20px 0;width: 100%;" class="">
+                        <span>&nbsp;&nbsp;</span>
+                        <a style="float: right;" href="<%= ctx %>/wechat/rights">会员权益</a>
+                </div>
+                <div style="width: 100%;">
+                    <div style="float: left;width: 50%;">
+                        <div class="yellow-font">积分余额</div>
+                        <div class="yellow-font"><%= userData.totalPoint || 0 %></div>
+                        <div class="mall-active">卡等级 <span><%= Level[userData.cardLevel] %></span></div>
+                    </div>
+
+                    <div style="float: left;width: 50%;">
+                        <div>
+                            <img style="width: 145%;"
+                                 src="<%= global.config.publicPath %>/page/images/icon/bar_blue.png"/>
+                            <span class="level-info">距离升级还差<span id="needPoint" style="font-weight: 700;"></span>消费积分</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="pointData">
+                <h3>暂无积分记录</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

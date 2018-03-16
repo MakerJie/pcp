@@ -1,0 +1,106 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "统计报表", txt2 = "订单半小时统计";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.css"
+          rel="stylesheet">
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" name="_sync" value="false"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店编号</span>
+                                                        <select class="form-control" id="storeSelect"
+                                                                name="name"
+                                                                emptyOption="true"
+                                                                ajaxType="post"
+                                                                codeField="dn"
+                                                                optionParam='{"properties":{"pageSize":1000,"type":"1","code_in":"<%= userData.shops.join(',') %>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">营业日期</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd"
+                                                               name="rptTime_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd"
+                                                               name="rptTime_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">营业时段</span>
+                                                        <select class="form-control select2 select2-multiple" name="code_or"
+                                                                style="width: 100%;"
+                                                                multiple="multiple"
+                                                                options="timeArea" id="timeAreaSelect"></select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i
+                                                                    class="fa fa-search"></i> 查询
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/zh-CN.js"></script>
+</body>
+</html>

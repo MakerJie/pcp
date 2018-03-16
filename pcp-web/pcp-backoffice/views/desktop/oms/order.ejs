@@ -1,0 +1,281 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "消费订单", txt2 = "订单列表";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" name="_sync" value="false"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店编号</span>
+                                                        <input type="text" name="shopCode" placeholder="精确查询"
+                                                               class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">订&nbsp;&nbsp;单&nbsp;&nbsp;号</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">消费方式</span>
+                                                        <select class="form-control"
+                                                                name="payMethod">
+                                                            <option value="">--请选择--</option>
+                                                            <option value="1">堂食</option>
+                                                            <option value="2">饿了吗</option>
+                                                            <option value="3">美团</option>
+                                                            <option value="4">大众点评</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">营业日期</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="openDay_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker" data-date-format="yyyy-mm-dd"
+                                                               name="openDay_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">小票单号</span>
+                                                        <input type="text" class="form-control" name="billNo" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                        <button type="button" class="btn btn-danger btn_sync">汇总并上发数据至SAP</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document"
+         style="width: 98%;">
+        <div class="modal-content">
+            <div class="modal-body" id="detailContent" style="padding: 5px;max-height: 650px;top: 0;overflow-x: hidden;overflow-y: auto;">
+                <div class="box" id="order-form">
+                    <div class="box-header" style="font-size: 16px;padding: 5px;">
+                        #订单号：
+                        <span name="code"></span>
+                        <span style="padding: 0 5px;"> - </span>
+                        <span name="billNo"></span>
+                        <span style="padding: 0 5px;"> - </span>
+                        <span name="statistics" style="color: #00AEEF;"></span>
+                        <span name="createTime" style="float: right;"></span>
+                    </div>
+                    <div class="box-content">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div>消费时间：
+                                    <span name="happenTime"></span>
+                                    (<span name="openDay"></span>)
+                                </div>
+                                <div>门店名称：
+                                    <span name="name"></span>
+                                </div>
+                                <div>会员名称：
+                                    <span name="userName"></span>
+                                </div>
+                                <div>就餐人数：
+                                    <span name="personNum">3</span>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div>消费方式：
+                                    <span name="methodName"></span>
+                                </div>
+                                <div>品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌：
+                                    <span name="brandName"></span>
+                                </div>
+                                <div>餐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;段：
+                                    <span name="periodName"></span>
+                                </div>
+                                <div>优惠类型：
+                                    <span name="disCode"></span>-
+                                    <span name="disName"></span>
+                                    <span name="disTypeName"
+                                          style="margin-left: 10px;background-color: yellow;color: #222222;"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 1rem;">
+                            <div class="col-md-12">
+                                <div id="lineData"></div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 1rem;">
+                            <div class="col-md-9">
+                                <div id="paymentData"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <table class="table table-clear">
+                                    <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <span>合计金额</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="totalAmount"></span>
+                                        </td>
+                                    </tr>
+                                    <tr id="disAmountTr" style="display: none;">
+                                        <td class="left">
+                                            <span>优惠金额</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="disAmount"></span>
+                                        </td>
+                                    </tr>
+                                    <tr id="smallFeeTr" style="display: none;">
+                                        <td class="left">
+                                            <span>抹零金额</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="smallFee"></span>
+                                        </td>
+                                    </tr>
+                                    <tr id="subDisAmountTr" style="display: none;">
+                                        <td class="left">
+                                            <span>单品折扣</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="subDisAmount"></span>
+                                        </td>
+                                    </tr>
+                                    <tr id="payDisAmountTr" style="display: none;">
+                                        <td class="left">
+                                            <span>支付折扣</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="payDisAmount"></span>
+                                        </td>
+                                    </tr>
+                                    <tr id="dividDisAmountTr" style="display: none;">
+                                        <td class="left">
+                                            <span>补贴金额</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="divAmount"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <span>小计</span>
+                                        </td>
+                                        <td class="right">
+                                            <span name="subAmount"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--/.row-->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="dataModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="top:0;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">数据同步</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 5px;">
+                <form name="data_form" class="edit-form" id="data_form" method="post" action="">
+                    <div class="form-group">
+                        <label class="form-control-label" for="code">支付时间</label>
+                        <input type="text" class="form-control" name="date" placeholder=""/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="name">消费门店</label>
+                        <input type="text" class="form-control" name="shopCode" placeholder=""/>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="mobile">消费单号</label>
+                        <input type="tel" class="form-control" name="code" placeholder=""/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_upload"><i class="fa fa-dot-circle-o"></i> 同步</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>

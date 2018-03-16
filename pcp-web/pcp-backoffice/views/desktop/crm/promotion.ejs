@@ -1,0 +1,144 @@
+<% const ctx = global.config.contextPath+global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include crmMenu %>
+        </div>
+
+      <div id="content" class="col-lg-10 col-sm-11">
+
+          <div class="row">
+              <ol class="breadcrumb list">
+                  <li><a href="<%= ctx %>/pms/index">会员与营促销</a></li>
+                  <li><a href="#">礼券管理</a></li>
+              </ol>
+          </div>
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card card-accent-primary">
+                    <div class="card-header">
+                        <i class="fa fa-gift"></i> 券类型
+                        <button type="button" class="btn btn-outline-primary btn-sm float-right btn_add hide_el"><i
+                                    class="fa fa-plus-circle"></i>&nbsp;新增
+                        </button>
+                    </div>
+                    <div id="dataList"></div>
+                </div>
+            </div>
+           <div class="col-lg-6">
+               <div class="card">
+                    <form id="query_form" action="" method="post" class="form-horizontal ">
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">券状态</span>
+                                    <select class="form-control" id="couponStatusSel"
+                                            name="status">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">已创建</option>
+                                        <option value="2">已领取</option>
+                                        <option value="3">已核销</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="card-header">
+                        <i class="fa fa-paper-plane"></i> 券列表
+                        <button type="button" class="btn btn-outline-danger btn-sm float-right btn_del_coupon hide_el"><i
+                                    class="fa fa-trash"></i>&nbsp;作废
+                        </button>
+                    </div>
+                    <div id="dataLineList"></div>
+                </div>
+           </div>
+           <!--/.col-->
+          </div>
+         </div>
+        </div>
+
+    <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-primary modal-md" role="document" style="max-width: 900px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">券类型编辑</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="data_form" method="post" class="edit-form" action="">
+                                <input type="hidden" name="id"/>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-control-label" for="name">券类型名称</label>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder=""/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-control-label">&nbsp;</label>
+                                        <div class="input-group">
+                                            <label class="input-group-addon">时间范围</label>
+                                            <input name="createTime" class="form-control daterange" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">适用门店</label>
+                                    <input type="text" class="form-control" name="properties.shop" placeholder=""/>
+                                </div>w
+                                <div class="form-group">
+                                    <label class="form-control-label">适用客户</label>
+                                    <input type="text" class="form-control" name="properties.customerType" placeholder=""/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">适用菜品</label>
+                                    <input type="text" class="form-control" name="properties.product" placeholder=""/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-control-label">满足订单条件</label>
+                                    <input type="text" class="form-control" name="properties.order" placeholder="订单金额"/>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="cctype">券金额</label>
+                                        <select class="form-control" id="cctype" name="properties.disType">
+                                            <option value="">--请选择--</option>
+                                            <option value="fixAmount">固定金额</option>
+                                            <option value="fixDis">固定折扣</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="ccvalue">值</label>
+                                        <input type="number" class="form-control" id="ccvalue" name="properties.disValue" placeholder="如果折扣，请填小数来表示百分比"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-danger" id="error_message"></div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include pmsMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="<%= ctx %>/pms/index">物料与采购</a></li>
+                    <li><a href="#">价格数据</a></li>
+                </ol>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div id="shopList"></div>
+                </div>
+                <div class="col-md-4" style="display:none;" id="selectMat">
+                    <!--<button class="btn btn-mini btn-primary btn-materiel-select" disabled style="margin: 0.2rem 0;"><i class="fa fa-plug"></i> 物料选择</button>-->
+                    <div id="materielList"></div>
+                </div>
+                <div class="col-md-5 " style="display: none;" id="selectPrice">
+                    <!--<button class="btn btn-mini btn-warning btn_saved" style="margin: 0.2rem 0;"><i class="fa fa-plug"></i> 保存</button>-->
+                    <div id="priceList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="detailContent" style="padding: 5px;">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>物料数据</h2>
+                    </div>
+                    <div class="box-content" style="padding: 0;">
+                        <div id="materielListSelect"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_confirm"><i class="fa fa-dot-circle-o"></i> 确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/dolphin/template/productGrid.js"></script>
+</body>
+</html>

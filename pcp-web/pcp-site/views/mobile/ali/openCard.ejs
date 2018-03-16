@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <title>会员开卡</title>
+</head>
+<body class="fix-header">
+<%
+ console.log(url,'------------------');
+ %>
+<div id="pageData" ret="<%= success %>" url="<%= url %>"></div>
+<div id="wrapper">
+    <p><%= msg %></p>
+</div>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+<script>
+
+    function exitApp() {
+        AlipayJSBridge.call('exitApp');
+    }
+
+    document.addEventListener('back', function (e) {
+        e.preventDefault();
+        if (window.AlipayJSBridge) {
+            exitApp();
+        } else {
+            document.addEventListener('AlipayJSBridgeReady', exitApp, false);
+        }
+    }, false);
+
+    $(function () {
+        <%if(success){%>
+        location.href = '<%= url %>';
+        <% } %>
+    });
+</script>
+
+</body>
+</html>

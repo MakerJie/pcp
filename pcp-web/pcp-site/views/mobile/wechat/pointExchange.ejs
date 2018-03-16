@@ -1,0 +1,43 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix
+        , pageName = "详情介绍";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid" style="font-size: 15px;">
+            <div class="block4" style="width: 200px;text-align: center;margin: 20px auto 10px auto;padding: 18px;">
+                <img src="" id="voucherImage" style="width: 100%;height: 100%;vertical-align: top;border-radius: 20px;">
+            </div>
+            <div class="text-center" style="color: #014288;"><strong id="prdName"></strong></div>
+            <div class="text-center" style="padding: 10px 0;"><span>所需积分 </span><span id="pointAmount" style="font-weight: 700;"></span></div>
+            <div class="text-center" style="margin: 10px 0 0 0;font-weight: 500;">兑换介绍</div>
+            <div style="padding: 20px;">
+                <div><strong>使用须知</strong></div>
+                <div style="padding: 0 10px;" id="remark_coupon"></div>
+                <p></p>
+                <div><strong>适用门店</strong></div>
+                <div style="padding: 0 10px;" id="scope_coupon"></div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-pizza btn_save" id="sendBtn" data-type="" data-user="" type="button">立即兑换</button>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+<div id="pageData" data-pre="<%= global.config.publicPath %> %>"></div>
+<% include ../common/footer.ejs %>
+</body>
+</html>

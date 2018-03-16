@@ -1,0 +1,172 @@
+<nav class="navbar navbar-default navbar-static-top m-b-0">
+    <div class="navbar-header">
+        <!-- Toggle icon for mobile view -->
+        <div class="top-left-part">
+            <!-- Logo -->
+            <a class="logo" href="index.html">
+              <!--  <img src="<%= global.config.publicPath %>/assets/plugins/images/admin-logo.png" alt="home"
+                     class="dark-logo"/>&lt;!&ndash;This is light logo icon&ndash;&gt;
+                <img src="<%= global.config.publicPath %>/assets/plugins/images/logo_02.png"
+                     style="max-height: 30px;" alt="home" class="light-logo"/>-->
+                <span class="hidden-xs">
+                        <img src="<%= global.config.publicPath %>/assets/plugins/images/admin-text.png" alt="home"
+                             class="dark-logo"/><!--This is light logo text-->
+                        <img src="<%= global.config.publicPath %>/assets/plugins/images/pizza3.png" alt="home"
+                             style="max-height: 30px;" class="light-logo"/>
+                     </span>
+            </a>
+        </div>
+        <!-- /Logo -->
+        <!-- Search input and Toggle icon -->
+        <ul class="nav navbar-top-links navbar-left">
+            <li><a href="javascript:void(0)" class="open-close waves-effect waves-light visible-xs">
+                    <i class="ti-close ti-menu"></i>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="javascript:void(0)"> <i
+                            class="mdi mdi-gmail"></i>
+                </a>
+                <ul class="dropdown-menu mailbox animated slideInDown">
+                    <li>
+                        <div class="drop-title">您绑定了<%= userData.shopNameList.length %>个门店</div>
+                    </li>
+                    <% for(let i = 0;i < userData.shopNameList.length;i++){ %>
+                    <li>
+                        <div class="message-center">
+                            <a href="javascript:void(0)">
+                                <div class="mail-contnet">
+                                    <%= userData.shopNameList[i] %>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <% } %>
+                </ul>
+                <!-- /.dropdown-messages -->
+            </li>
+            <!-- .Megamenu -->
+            <li class="mega-dropdown">
+                <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="javascript:void(0)">
+                    <span class="hidden-xs">意见与建议</span> <i class="icon-options-vertical"></i>
+                </a>
+                <ul class="dropdown-menu mega-dropdown-menu animated bounceInDown">
+                    <li class="col-sm-8">
+                        <div>
+                            <form id="suggest_form">
+                                <div class="form-group">
+                                    <label class="col-md-12">您的姓名：</label>
+                                    <div class="col-md-12">
+                                        <input name="name" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">您的联系方式：</label>
+                                    <div class="col-md-12">
+                                        <input name="remark" class="form-control" type="text" placeholder="手机、邮箱、QQ等">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">请留下您的宝贵意见：</label>
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" name="content"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6" style="margin-top: 5px;">
+                                        <button type="button" class="btn btn-primary btn_suggest_save"><i class="fa fa-dot-circle-o"></i>
+                                            提交
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                </ul>
+            </li>
+            <!-- /.Megamenu -->
+        </ul>
+        <!-- This is the message dropdown -->
+        <ul class="nav navbar-top-links navbar-right pull-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="javascript:void(0)">
+                    <img src="<%= global.config.publicPath %>/assets/plugins/images/users/head1.jpg"
+                         alt="user-img" class="img-circle user-img">
+                    <b class="hidden-xs"><%= userData.userName %></b>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated flipInY">
+                    <li>
+                        <div class="dw-user-box">
+                            <div class="u-img"><img
+                                        src="<%= global.config.publicPath %>/assets/plugins/images/users/head1.jpg"
+                                        alt="user"/></div>
+                            <div class="u-text">
+                                <h4><%= userData.userName %><span
+                                            style="font-size: 85%;margin-left: 5px;">[<%= userData.userCode %>]</span>
+                                </h4>
+                                <p class="text-muted"><%= userData.userEmail %></p>
+                                <p class="text-muted"><%= userData.mobile %></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li><a id="updatePwd" href="javascript:void(0)" data-toggle="modal" data-target="#responsive-modal"><i
+                                    class="ti-settings"></i> 修改密码</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="<%= ctx %>/logout"><i class="fa fa-power-off"></i> 退出</a></li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    </div>
+    <!-- /.navbar-header -->
+    <!-- /.navbar-top-links -->
+    <!-- /.navbar-static-side -->
+</nav>
+
+<div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-primary modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">修改密码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="password_form" class="password-form" method="post" action="">
+                            <input type="hidden" name="id"/>
+                            <div class="form-group">
+                                <label class="form-control-label">原密码</label>
+                                <input type="password" class="form-control" name="password" placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">新密码</label>
+                                <input type="password" class="form-control" name="newPassword"
+                                       placeholder=""/>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">确认密码</label>
+                                <input type="password" class="form-control" name="confirmPassword"
+                                       placeholder=""/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-danger" id="error_message_p"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_password"><i class="fa fa-dot-circle-o"></i> 保存
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
