@@ -1,0 +1,84 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include pmsMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb list">
+                    <li><a href="<%= ctx %>/pms/index">物料与采购</a></li>
+                    <li><a href="#">外部采购</a></li>
+                </ol>
+            </div>
+            <div class="row">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>查询条件</h2>
+                    </div>
+                    <div class="box-content">
+                        <form id="query_form" action="" method="post" role="form">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">单据号</span>
+                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                               value=""/>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">日期</span>
+                                        <input type="text" class="form-control date-picker" name="createTime_gt"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary btn_query">查询</button>
+                                <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i>
+                                    新增外部采购订单
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#home" aria-controls="home" role="tab" data-toggle="tab"> 待收货订单</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#home" aria-controls="home" role="tab" data-toggle="tab"> 待提交订单</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"> 全部订单</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="col-md-12">
+                            <div id="dataList"></div>
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">aaaa</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<% const ctx = global.config.contextPath + global.config.viewPrefix; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/public.ejs %>
+    <style>
+        .form-control-label {
+            line-height: 32px !important;
+        }
+
+        .price {
+            text-align: center;
+        }
+
+        .qtnCount {
+            text-align: center;
+        }
+
+        .info {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<% include ../header.ejs %>
+<div class="container">
+    <div class="row">
+        <div id="sidebar-left" class="col-lg-2 col-sm-1">
+            <% include pmsMenu %>
+        </div>
+
+        <div id="content" class="col-lg-10 col-sm-11">
+            <div class="row">
+                <ol class="breadcrumb">
+                    <li><a href="<%= ctx %>/pms/index">物料与采购</a></li>
+                    <li><a href="#">采购订单</a></li>
+                </ol>
+            </div>
+            <div class="row">
+                <div class="box">
+                    <div class="box-header">
+                        <h2>查询条件</h2>
+                    </div>
+                    <div class="box-content">
+                        <form role="form" id="query_form">
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">订单类型</span>
+                                        <select class="form-control" name="type" options="purchaseType"></select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">订单编号</span>
+                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                               value=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-primary btn_query">查询</button>
+                                <button type="button" class="btn btn-inverse btn_add"><i class="fa fa-plus-circle"></i>
+                                    新增采购订单
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <table class="grid">
+                        <thead>
+                        <tr style="font-weight: 700;">
+                            <td style="width: 15%;">&nbsp;&nbsp;</td>
+                            <td>商品</td>
+                            <td style="width: 180px;text-align: center;">价格</td>
+                            <td style="width: 130px;text-align: center;">数量</td>
+                            <td style="width: 110px;text-align: center;">收货</td>
+                            <td style="width: 110px;text-align: center;">交货</td>
+                            <td style="width: 150px;text-align: center;">合计</td>
+                            <td style="width: 240px;text-align: center;">状态/操作</td>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div id="dataList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1106px;right: 0;top: 0;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row" id="purchaseDetail">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" style="float: right;display: flex;" id="supplierSelect">
+                                    <label style="width: 150px;line-height: 32px;">供应商选择</label>
+                                    <select class="form-control" id="supplyer"
+                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                            ajaxType="post"
+                                            optionParam='{"properties":{"pageSize":1000,"type":""}}'
+                                            optionUrl="/api/e69293fefcd54ca3b8bef8f0a7a73688">
+                                    </select>
+                                </div>
+                                <div class="form-group" style="float: right;display: flex;" id="stockSelect">
+                                    <label style="width: 150px;line-height: 32px;">调出总仓选择</label>
+                                    <select class="form-control" id="stockHouse"
+                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                            ajaxType="post"
+                                            optionParam='{"properties":{"pageSize":1000,"type":"2","_centerCode":"<%= userData.shopCode %>"}}'
+                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                    </select>
+                                </div>
+                                <div class="form-group" style="float: right;display: flex;" id="stockOutSelect">
+                                    <label style="width: 150px;line-height: 32px;">调出门店选择</label>
+                                    <select class="form-control" id="stockOut"
+                                            emptyOption="false"
+                                            style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                            ajaxType="post"
+                                            value="<%= userData.shopCode %>"
+                                            optionParam='{"properties":{"pageSize":1000,"code":"<%= userData.shopCode %>"}}'
+                                            optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                    </select>
+                                </div>
+                                <ul class="nav nav-tabs" role="tablist" id="myTabs">
+                                    <li role="presentation" class="active">
+                                        <a href="#type4" id="tab1" idx="1"
+                                           aria-controls="type4" role="tab"
+                                           data-toggle="tab"><i class="fa fa-book"></i> 采购类型</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#home4" id="tab2" idx="2"
+                                           aria-controls="home4" role="tab"
+                                           data-toggle="tab"><i class="fa fa-camera-retro"></i> 物料选择</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#profile4" id="tab3" idx="3"
+                                           aria-controls="profile4" role="tab" data-toggle="tab">
+                                            <i class="fa fa-legal"></i> 填写并核对 &nbsp;<span
+                                                    class="badge badge-pill badge-danger"
+                                                    id="cartNumBadge">0</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="type4" role="tabpanel">
+                                        <div class="row" id="typeList" style="padding: 1rem 2rem;">
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <label class="radio">
+                                                        <input name="optionsRadios" class="optionRadio" checked
+                                                               id="optionsRadios1" value="10" type="radio">
+                                                        外部采购订单
+                                                    </label>
+                                                    <hr/>
+                                                    <label class="radio">
+                                                        <input name="optionsRadios" class="optionRadio"
+                                                               id="optionsRadios2" value="20" type="radio">
+                                                        门店至门店调拨单
+                                                    </label>
+                                                    <hr/>
+                                                    <label class="radio">
+                                                        <input name="optionsRadios" class="optionRadio"
+                                                               id="optionsRadios3" value="30" type="radio">
+                                                        总仓至门店调拨单
+                                                    </label>
+                                                    <hr/>
+                                                    <label class="radio">
+                                                        <input name="optionsRadios" class="optionRadio"
+                                                               id="optionsRadios4" value="40" type="radio">
+                                                        总仓至总仓调拨单
+                                                    </label>
+                                                    <hr/>
+                                                    <label class="radio">
+                                                        <input name="optionsRadios" class="optionRadio"
+                                                               id="optionsRadios2" value="90" type="radio">
+                                                        外部采购退货单（未完成）
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="home4" role="tabpanel">
+                                        <div class="row" style="padding: 10px;">
+                                            <div class="col-md-5">
+                                                <div class="input-group">
+                                                    <input id="searchInput" class="form-control" type="text"
+                                                           placeholder="物料编码模糊查询">
+                                                    <span class="input-group-btn"><button class="btn btn-search"
+                                                                                          type="button">搜索</button></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="productList">
+                                            请选择查询条件
+                                        </div>
+                                        <div id="error_message"></div>
+                                    </div>
+                                    <div class="tab-pane" id="profile4" role="tabpanel" style="padding: 10px;">
+                                        <form action="" method="post" class="form-horizontal " id="order-form">
+                                            <input type="hidden" name="status" value="" id="orderStatus"/>
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <!--<div class="form-group row">-->
+                                                    <!--<label class="col-sm-3">订单类型</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                    <!--<span name="type"></span>-->
+                                                    <!--</div>-->
+                                                    <!--</div>-->
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3" style="font-weight: 700;">订单金额</label>
+                                                        <div class="col-sm-8">
+                                                            <span name="totalAmount">2222.00</span>
+                                                        </div>
+                                                    </div>
+                                                    <hr style="margin: 1rem;"/>
+                                                    <div class="form-group row" id="shopInDiv">
+                                                        <label class="col-sm-3 form-control-label">购入门店</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" id="purchaseShop"
+                                                                    emptyOption="false"
+                                                                    style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                                    ajaxType="post"
+                                                                    optionParam='{"properties":{"pageSize":1000}}'
+                                                                    optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row" id="centerInDiv">
+                                                        <label class="col-sm-3 form-control-label">转入总仓</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" id="centerInShop"
+                                                                    style="height: 33px;padding: 0 0.75rem;min-width: 120px;"
+                                                                    ajaxType="post"
+                                                                    optionParam='{"properties":{"pageSize":1000,"type":"2"}}'
+                                                                    optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 form-control-label static-label"
+                                                               for="deliveryDate">计划交货</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="text" name="deliveryDate"
+                                                                   class="form-control date-picker" id="date01"
+                                                                   data-date-format="yyyy-mm-dd"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 form-control-label">采购组织</label>
+                                                        <div class="col-sm-8">
+                                                            <input name="org" class="form-control" value="1000">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 form-control-label">采&nbsp;&nbsp;&nbsp;购&nbsp;&nbsp;&nbsp;组</label>
+                                                        <div class="col-sm-8">
+                                                            <input name="grp" class="form-control" value="300">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row" id="freePurchaseDiv">
+                                                        <label class="col-sm-3 form-control-label">免费项目</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" id="purchaseFree" name="free"
+                                                                    style="height: 33px;padding: 0 0.75rem;min-width: 120px;">
+                                                                <option value="false" selected>否</option>
+                                                                <option value="true">是</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="currency" class="form-control"
+                                                           value="CNY">
+                                                    <!--<div class="form-group row">-->
+                                                    <!--<label class="col-sm-3">币&nbsp;&nbsp;&nbsp;&nbsp;种</label>-->
+                                                    <!--<div class="col-sm-8">-->
+                                                    <!--<input type="hidden" name="currency" class="form-control">-->
+                                                    <!--</div>-->
+                                                    <!--</div>-->
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <div id="selectList"></div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info center nextStep" data-next="0" id="preStep"
+                        style="display: none;">上一步
+                </button>
+                <button type="button" class="btn btn-info center nextStep" data-next="1" id="nextStep">下一步
+                </button>
+                <button type="button" class="btn btn-warning center btn-save" data-status="1" style="display: none;"
+                        id="saveBtn2">
+                    保存
+                </button>
+                <button type="button" class="btn btn-danger center btn-save" data-status="2" style="display: none;"
+                        id="saveBtn">
+                    保存并提交至SAP
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:1000px;top:0;right: 0;" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 5px;">
+                <form id="receive_form">
+                    <div id="receiveList"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_receive"><i class="fa fa-dot-circle-o"></i> 收货</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="dataModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" style="width:1000px;top:0;right: 0;" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="padding: 5px;">
+                <div id="deliveryList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_delivery"><i class="fa fa-dot-circle-o"></i> 交货
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<% include ../bottom.ejs %>
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/dolphin/template/productGrid.js"></script>
+</body>
+</html>

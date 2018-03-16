@@ -1,0 +1,125 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "统计报表", txt2 = "采购订单报表";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form role="form" id="query_form" class="query-condition">
+                                            <input type="hidden" name="_sync" value="false"/>
+                                            <input type="hidden" name="type" value="10"/>
+                                            <input type="hidden" name="status_not_equal" value="400"/>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">订&nbsp;单&nbsp;编&nbsp;号</span>
+                                                        <input type="text" name="code_like" placeholder="模糊查询" class="form-control"
+                                                               value=""/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">门店名称</span>
+                                                        <select class="form-control" id="storeSelect"
+                                                                name="storeCode"
+                                                                emptyOption="true"
+                                                                ajaxType="post"
+                                                                optionParam='{"properties":{"pageSize":1000,"code_in":"<%= userData.shops.join(',') %>"}}'
+                                                                optionUrl="/api/445a2ba90204414387ba30a336f016b6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">供应商名称</span>
+                                                        <select id="supplyer" name="procureCode" class="form-control"
+                                                                ajaxType="post"
+                                                                optionParam='{"endpoint":"038","userId":"<%= userData.userId %>","WERKS":"<%= userData.shopCode.substr(0,4) %>","LGORT":"<%= userData.shopCode.substr(4) %>"}'
+                                                                codeField="LIFNR" nameField="NAME_ORG1"
+                                                                optionUrl="/api/b131c5660a694b8e8dbb9ae54247af85">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <% let now = new Date(); now.setDate(1); %>
+                                                        <span class="input-group-addon">订单日期</span>
+                                                        <input class="form-control date-picker" id="syncDate_gt" data-date-format="yyyy-mm-dd"
+                                                               name="syncDate_gt" value="<%= global.tool.dateFormatter(now,'yyyy-MM-dd') %>">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker" id="syncDate_le"
+                                                               data-date-format="yyyy-mm-dd" value="<%= global.tool.dateFormatter(new Date(),'yyyy-MM-dd') %>"
+                                                               name="syncDate_le">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-actions">
+                                                        <button type="button" class="btn btn-primary btn_query"><i class="fa fa-search"></i> 查询</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <table class="grid">
+                                    <thead>
+                                    <tr style="font-weight: 700;">
+                                        <td style="width: 15%;text-align: center;">物料编码</td>
+                                        <td style="width: 20%;text-align: center;">物料名称</td>
+                                        <td style="width: 22%;text-align: center;">数量</td>
+                                        <td style="width: 10%;text-align: center;">单位</td>
+                                        <td style="width: 15%;text-align: center;">采购价</td>
+                                        <td style="width: 18%;text-align: center;">小计</td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+<% include ../common/footer.ejs %>
+</body>
+</html>
