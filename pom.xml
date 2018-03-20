@@ -37,7 +37,7 @@
         <java_target_version>1.8</java_target_version>
         <java.version>1.8</java.version>
         <file_encoding>UTF-8</file_encoding>
-        <dists>/tmp/dists</dists>
+        <dists>/home/pec/app/dists</dists>
     </properties>
 
     <dependencyManagement>
