@@ -987,36 +987,6 @@
     ]);
 
     Dolphin.enum.addEnum('logMenu', [
-        {code: 'purchaseNew1', name: '外部订货'},
-        {code: 'purchaseList1', name: '外部收货查询'},
-        {code: 'purchaseNew3', name: '总仓订货'},
-        {code: 'purchaseList3', name: '总仓收货与查询'},
-        {code: 'purchaseNew9', name: '外部退货'},
-        {code: 'purchaseNew10', name: '总仓退货'},
-        {code: 'purchaseList9', name: '门店退货发货'},
-        {code: 'purchaseNew4', name: '总仓调拨'},
-        {code: 'purchaseDelivery', name: '总仓调拨交货'},
-        {code: 'purchaseList4', name: '总仓调拨收货'},
-
-        {code: 'purchaseNew2', name: '门店调拨'},
-        {code: 'purchaseList2', name: '门店调拨查询'},
-        {code: 'fetch', name: '物料消耗管理'},
-        {code: 'stockCheck', name: '盘点管理'},
-        {code: 'materiel', name: '物料主数据'},
-
-        {code: 'order', name: '订单列表'},
-        {code: 'orderSummary', name: '订单汇总'},
-        {code: 'orderCheck', name: '订单综合核对'},
-        {code: 'divideRule', name: '分摊规则'},
-        {code: 'payconfig', name: '支付方式'},
-        {code: 'checkUpload', name: '对账单上传'},
-        {code: 'receiveCheck', name: '应收对账'},
-        {code: 'receiveCheckSelect', name: '应收对账与查询'},
-        {code: 'cashReconc', name: '现金对账'},
-        {code: 'cashReconcSelect', name: '现金对账查询'},
-        {code: 'rentManagement', name: '租金合同管理'},
-        {code: 'accruedRent', name: '预提租金计算'},
-        {code: 'stockDifferent', name: '库存分差报表'},
 
         {code: 'qrcode', name: '二维码管理'},
         {code: 'channel', name: '渠道管理'},
@@ -1024,13 +994,9 @@
         {code: 'message', name: '留言管理'},
         {code: 'levelManage', name: '会员等级管理'},
         {code: 'userPoint', name: '积分/等级'},
-        {code: 'authority', name: '会员权益'},
         {code: 'pointStoreType', name: '积分商品与类型'},
-        {code: 'promotion', name: '礼券管理'},
         {code: 'advertise', name: '广告管理'},
-        {code: 'reward', name: '奖励管理'},
         {code: 'saverTicket', name: '优惠券管理'},
-
         {code: 'account', name: '账号管理'},
         {code: 'role', name: '角色管理'},
     ]);

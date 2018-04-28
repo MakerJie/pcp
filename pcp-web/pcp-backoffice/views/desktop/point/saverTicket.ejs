@@ -1,0 +1,527 @@
+<%
+const ctx = global.config.contextPath + global.config.viewPrefix,
+        txt1 = "积分优惠券管理", txt2 = "优惠券管理";
+let mdiIcon = {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../common/meta.ejs %>
+    <% include ../common/public.ejs %>
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/css/dropify.min.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/clockpicker/dist/jquery-clockpicker.min.css"
+          rel="stylesheet">
+    <link href="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.css"
+          rel="stylesheet">
+    <style>
+        .form-group .input-group {
+            width: 100%;
+        }
+        span small {
+            float: right;
+        }
+    </style>
+</head>
+<body class="fix-header">
+<% include ../common/prload.ejs %>
+<div id="wrapper">
+    <% include ../common/nav.ejs %>
+    <% include ../common/menu.ejs %>
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <% include ../common/breadcrumb.ejs %>
+            <div class="white-box">
+                <!-- .row -->
+                <div class="row">
+                    <% include ../common/subMenu.ejs %>
+                    <div class="col-lg-10 col-md-9 col-sm-12 col-xs-12 mail_listing">
+                        <div class="row">
+                            <div class="panel panel-inverse hidden-xs">
+                                <div class="panel-heading" data-perform="panel-collapse">查询与操作
+                                    <div class="panel-action">
+                                        <a href="javascript:void(0)"><i class="ti-angle-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="panel-wrapper collapse">
+                                    <div class="panel-body">
+                                        <form id="query_form" action="" method="post" role="form"
+                                              class="query-condition">
+                                            <div class="form-group row">
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">优惠券类型</span>
+                                                        <select class="form-control" style="width: 200px;"
+                                                                name="couponType" options="couponType"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">优惠券名称</span>
+                                                        <input type="text" name="name_like" placeholder="模糊查询"
+                                                               class="form-control" value=""/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">创建时间</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="createTime_gt">
+                                                        <span class="input-group-addon">到</span>
+                                                        <input class="form-control date-picker"
+                                                               data-date-format="yyyy-mm-dd" name="createTime_le">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-actions">
+                                                <button type="button" class="btn btn-primary btn_query"><i
+                                                            class="fa fa-search"></i> 查询
+                                                </button>
+                                                <button type="button" class="btn btn-inverse btn_add"><i
+                                                            class="fa fa-plus-circle"></i> 新增
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn_send"><i
+                                                            class="fa fa-share-square-o"></i> 券下发
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="dataList"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- .row -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <% include ../common/bottom.ejs %>
+    </div>
+    <!-- /#page-wrapper -->
+</div>
+
+
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 950px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">优惠券编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form name="data_form" class="edit-form" id="data_form" method="post" action="">
+                        <input type="hidden" class="form-control" name="id">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">优惠券类型</label>
+                                        <div class="input-group ">
+                                            <select class="form-control" name="couponType" options="couponType"
+                                                    id="couponTypeSelect">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">券名称</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control " name="name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">券标的</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control " name="rule" placeholder=""/>
+                                        </div>
+                                        <span class="help-block"><small>代金券：填写金额<br/>买赠券：填写赠品物料编码<br/>满减：如200减200=200/20<br/>比例券：如2折券0.2</small></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="margin-top: 24px;">
+                                        <div class="checkbox checkbox-danger">
+                                            <input id="remindCheck" checked="" type="checkbox" name="remind">
+                                            <label for="checkbox0"> 到期提醒 </label>
+                                        </div>
+                                        <div class="checkbox checkbox-info">
+                                            <input id="donationCheck" checked="" type="checkbox" name="donation">
+                                            <label for="checkbox0"> 可转赠 </label>
+                                        </div>
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="ownUseCheck" type="checkbox" name="ownUse">
+                                            <label for="checkbox0"> 自己不可使用 </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">使用说明</label>
+                                        <div class="input-group ">
+                                            <textarea class="form-control " name="description" rows="2"
+                                                      style="height: auto;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">使用范围描述</label>
+                                        <div class="input-group ">
+                                            <textarea class="form-control " name="specification" rows="2"
+                                                      style="height: auto;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">有效期类型</label>
+                                        <div class="input-group ">
+                                            <select class="form-control" name="typeLimit" options="couponTypeLimit"
+                                                    id="typeLimitSelect">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">可下发最大数量</label>
+                                        <div class="input-group ">
+                                            <input type="number" class="form-control " name="maxQuantity"
+                                                   placeholder="小于1的数字无限制数量"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group hidden" id="dayAfterForm">
+                                        <div class="input-group ">
+                                            <span class="input-group-addon">领取后</span>
+                                            <input type="number" class="form-control " name="dayAfter"/>
+                                            <span class="input-group-addon">有效天数</span>
+                                            <input type="number" class="form-control " name="days"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group hidden" id="dayAreaForm">
+                                        <div class="input-group ">
+                                            <span class="input-group-addon">开始日期</span>
+                                            <input class="form-control date-picker"
+                                                   data-date-format="yyyy-mm-dd" name="activeDate">
+                                            <span class="input-group-addon">结束日期</span>
+                                            <input class="form-control date-picker"
+                                                   data-date-format="yyyy-mm-dd" name="expireDate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="largeImage" id="largeThumHidden" />
+                        <input type="hidden" name="smallImage" id="smallThumHidden" />
+                    </form>
+
+                    <div class="col-md-6">
+                        <span>大图<small>建议尺寸：600px*300px</small></span>
+                        <form id="largImageFormSub">
+                            <input type="file"
+                                   name="upfile"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-2.jpg"
+                                   id="largeThum" class="dropify"/>
+                        </form>
+                        <hr/>
+                        <span>小图<small>建议尺寸：300px*300px</small></span>
+                        <form id="smallImageFormSub">
+                            <input type="file" id="smallThum"
+                                   name="upfile"
+                                   data-default-file="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/src/images/test-image-1.jpg"
+                                   class="dropify"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="error_message_div" style="color: red;"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_save"><i class="fa fa-dot-circle-o"></i> 保存</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="ruleDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">券规则配置</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="rule_form" class="edit-form" id="rule_form" method="post" action="">
+                    <input type="hidden" class="form-control" name="id" id="typeId">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>时间规则配置</h5>
+                            <div id="timeRuleList"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <h5>范围规则配置</h5>
+                            <div id="scopeRuleList"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn_saveRule"><i class="fa fa-dot-circle-o"></i> 确定
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal-dialog -->
+
+<div class="modal fade" id="shopDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">门店选择</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="shopList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info btn_shop_select"><i class="fa fa-dot-circle-o"></i> 确定选择
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="userDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">会员选择</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="user_query_form" action="" method="post" role="form"
+                      class="query-condition">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">会员卡号</span>
+                                <input type="text" name="cardNo_like" placeholder="模糊查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">联系手机</span>
+                                <input type="text" name="mobile_like" placeholder="模糊查询"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">会员等级</span>
+                                <select class="form-control" name="cardLevel"
+                                        options="userLevel"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">是否品酒</span>
+                                <select class="form-control" name="tasting" options="decide"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">会员性别</span>
+                                <select class="form-control" name="sex" options="sex"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">会员星座</span>
+                                <select class="form-control" name="constellation" options="constellation"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">省</span>
+                                <select class="form-control" name="province" options="chinaRegion"
+                                        id="selectProvince"></select>
+                                <span class="input-group-addon">市</span>
+                                <select class="form-control" name="city" style="width: 120px" id="selectCity"></select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">生日</span>
+                                <span class="input-group-addon">月</span>
+                                <select class="form-control" name="birMonStr" id="userMonth"
+                                        options="accountMonth"></select>
+                                <span class="input-group-addon">日</span>
+                                <select class="form-control" name="birDayStr" id='userDay' options="accountDay">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">我想参加</span>
+                                <select class="form-control" name="wantArea" data-placeholder="请选择...">
+                                    <option value="">--请选择--</option>
+                                    <option value="新品试吃">新品试吃</option>
+                                    <option value="儿童披萨制作派对">儿童披萨制作派对</option>
+                                    <option value="交友派对">交友派对</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">入会年数</span>
+                                <input type="number" name="_joinYear" placeholder="0为当年,1为一年前"
+                                       class="form-control"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <p>菜品偏好</p>
+                            <select class="select2 m-b-10 select2-multiple foodFaver" style="width: 100%;"
+                                    multiple="multiple" name="preference_like" data-placeholder="请选择...">
+                                <option value="披萨">披萨</option>
+                                <option value="意面">意面</option>
+                                <option value="沙拉">沙拉</option>
+                                <option value="海鲜">海鲜</option>
+                                <option value="牛排">牛排</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <p>标签</p>
+                            <select class="select2 m-b-10 select2-multiple tagSelect" style="width: 100%;"
+                                    multiple="multiple" name="userTag_like" data-placeholder="请选择...">
+                                <option value="素食主义">素食主义</option>
+                                <option value="无肉不欢">无肉不欢</option>
+                                <option value="修身达人">修身达人</option>
+                                <option value="修图狂人">修图狂人</option>
+                                <option value="选择困难症">选择困难症</option>
+                                <option value="甜品控">甜品控</option>
+                                <option value="溜娃负责人">溜娃负责人</option>
+                                <option value="无辣不欢">无辣不欢</option>
+                                <option value="仪式感">仪式感</option>
+                                <option value="懒癌晚期">懒癌晚期</option>
+                                <option value="爱电商">爱电商</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary btn_user_query"><i
+                                        class="fa fa-search"></i> 查询
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+                <div id="userDataList"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-warning btn_user_send" data-send="1"><i class="fa fa-circle"></i>
+                    下发至所有选中会员
+                </button>
+                <button type="button" class="btn btn-danger btn_user_send" data-send="2"><i class="fa fa-adjust"></i>
+                    下发至所有查询结果会员
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="couponDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-md" role="document" style="width: 1120px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">下发历史 - <span id="couponTitle"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <div id="couponSentList"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+<% include ../common/footer.ejs %>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropify/dist/js/dropify.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/dropzone-master/dist/dropzone.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/clockpicker/dist/jquery-clockpicker.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="<%= global.config.publicPath %>/assets/plugins/bower_components/custom-select/custom-select.min.js"></script>
+</body>
+</html>
