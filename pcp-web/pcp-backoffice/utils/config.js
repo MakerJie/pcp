@@ -12,7 +12,7 @@ module.exports = {
     mock: false,
     production:false,
 
-    uploadPath: 'E:\\bibased\\pcp\\pcp-web\\pcp-backoffice\\public\\uploadFiles\\images',
+    uploadPath: '/Users/jie/Desktop/jerry/pcp/pcp-web/pcp-backoffice/public/uploadFiles/images',
     apiServerUrl: 'http://127.0.0.1:11007/services',
     apiFilePath: '/../apiConfig.json'
 };

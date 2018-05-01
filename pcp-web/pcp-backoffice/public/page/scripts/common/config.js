@@ -358,7 +358,7 @@
     Dolphin.enum.addEnum('activityType', [
         {code: '1', name: '入会活动'},
         {code: '2', name: '会员活动'},
-        {code: '3', name: '消费活动'},
+      /*  {code: '3', name: '消费活动'},*/
     ]);
 
     Dolphin.enum.addEnum('activityChannel', [
